@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 const Log = require('debug')('main');
 
 const FETCH_TIMEOUT = 10000;
+const MAX_RUNNING = 16;
 
 const ROOT = process.argv[2] || 'KN6PLV-BrkOxfLA-Omni';
 
@@ -58,7 +59,6 @@ const state = {
     }
   }
 
-  const MAX_RUNNING = 4;
   let count = 0;
   let done;
   function docrawl() {

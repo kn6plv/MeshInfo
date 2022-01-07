@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+const fs = require('fs');
 const fetch = require('node-fetch');
 const Log = require('debug')('main');
 
@@ -7,6 +8,8 @@ const FETCH_TIMEOUT = 10000;
 const MAX_RUNNING = 16;
 
 const ROOT = process.argv[2] || 'KN6PLV-BrkOxfLA-Omni';
+const CSVFILE = "out.csv"
+const JSONFILE = "out.json"
 
 async function readNode(name) {
   Log('readNode', name);
@@ -15,7 +18,7 @@ async function readNode(name) {
       reject(new Error('timeout'));
     }, FETCH_TIMEOUT);
     try {
-      const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?&hosts=1&services_local=1`);
+      const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?&hosts=1&services_local=1&link_info=1`);
       const json = await req.json();
       resolve(json);
     }
@@ -66,7 +69,6 @@ const state = {
       count++;
       crawl().then(_ => {
         count--;
-        //if (state.populated.length === 10) { done(); return };
         if (state.pending.length) {
           docrawl();
         }
@@ -82,13 +84,16 @@ const state = {
 
   Log('Nodes: found', Object.keys(state.found).length, 'populated', state.populated.length);
 
-  console.log('node,wlan_ip,last_seen,uptime,loadavg,model,firmware_version,ssid,channel,chanbw,tunnel_installed,active_tunnel_count,lat,lon,wifi_mac_address,api_version,board_id,firmware_mfg,grid_square,lan_ip,services,location_fix');
+  const csvtable = [];
+  const jsontable = [];
+
+  csvtable.push('node,wlan_ip,last_seen,uptime,loadavg,model,firmware_version,ssid,channel,chanbw,tunnel_installed,active_tunnel_count,lat,lon,wifi_mac_address,api_version,board_id,firmware_mfg,grid_square,lan_ip,services,location_fix');
   const nodes = state.populated.sort((a, b) => a.node.localeCompare(b.node));
   const d = new Date();
   const now = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${d.getHours()}:${('0'+d.getMinutes()).substr(-2)}:${('0'+d.getSeconds()).substr(-2)}`;
   nodes.forEach(node => {
     try {
-      console.log(
+      csvtable.push(
         `${node.node},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).ip || 'Unknown'},"${now}","${node.sysinfo.uptime}",`+
         `a:3:{${node.sysinfo.loads.map((l,i) => 'i:'+i+';d:'+l.toFixed(2)+';').join('')}},`+
         `"${node.node_details.model}",${node.node_details.firmware_version},`+
@@ -98,11 +103,19 @@ const state = {
         `${node.grid_square || '"Not Available"'},${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'},`+
         `"a:${(node.services_local || []).length}:{${(node.services_local || []).map((s,i)=> 'i:'+i+';a:3:{s:4:""name"";s:'+s.name.length+':""'+s.name+'"";s:8:""protocol"";s:'+s.protocol.length+':""'+s.protocol+'"";s:4:""link"";s:'+s.link.length+':""'+s.link+'"";}').join('')}}",0`
       );
+      jsontable.push({ data: node });
     }
     catch (e) {
       Log(e);
     }
   });
+
+  fs.writeFileSync(CSVFILE, csvtable.join("\n"));
+  fs.writeFileSync(JSONFILE, JSON.stringify({
+    version: "1",
+    date: new Date(),
+    nodeInfo: jsontable
+  }));
 
   process.exit();
 

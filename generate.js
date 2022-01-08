@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const Log = require('debug')('main');
 
 const FETCH_TIMEOUT = 10000;
-const MAX_RUNNING = 16;
+const MAX_RUNNING = 32;
 
 const ROOT = process.argv[2] || 'KN6PLV-BrkOxfLA-Omni';
 const CSVFILE = "out.csv"
@@ -13,17 +13,21 @@ const JSONFILE = "out.json"
 
 async function readNode(name) {
   Log('readNode', name);
-  return new Promise(async (resolve, reject) => {
-    setTimeout(() => {
-      reject(new Error('timeout'));
+  return new Promise(async resolve => {
+    const t = setTimeout(() => {
+      Log('timeout', name);
+      resolve(null);
     }, FETCH_TIMEOUT);
     try {
       const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?&hosts=1&services_local=1&link_info=1`);
-      const json = await req.json();
-      resolve(json);
+      resolve(await req.json());
     }
     catch (e) {
-      reject(e);
+      Log('failed', name, e);
+      resolve(null);
+    }
+    finally {
+      clearTimeout(t);
     }
   });
 }
@@ -40,12 +44,12 @@ const state = {
   state.pending.push({ name: ROOT });
 
   async function crawl() {
-    try {
-      const next = state.pending.shift();
-      if (next) {
-        const node = await readNode(next.name);
+    const next = state.pending.shift();
+    if (next) {
+      const node = await readNode(next.name);
+      if (node) {
         state.populated.push(node);
-        const hosts = node.hosts;
+        const hosts = node.hosts || [];
         for (let i = 0; i < hosts.length; i++) {
           const hostname = hosts[i].name.toLowerCase();
           if (!state.found[hostname]) {
@@ -56,9 +60,6 @@ const state = {
           }
         }
       }
-    }
-    catch (e) {
-      Log(e);
     }
   }
 

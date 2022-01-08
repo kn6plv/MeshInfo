@@ -4,8 +4,9 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const Log = require('debug')('main');
 
-const FETCH_TIMEOUT = 10000;
+const FETCH_TIMEOUT = 30000;
 const MAX_RUNNING = 32;
+const MAX_ATTEMPTS = 3;
 
 const ROOT = process.argv[2] || 'KN6PLV-BrkOxfLA-Omni';
 const CSVFILE = "out.csv"
@@ -41,7 +42,7 @@ const state = {
 (async function() {
 
   state.found[ROOT.toLowerCase()] = true;
-  state.pending.push({ name: ROOT });
+  state.pending.push({ name: ROOT, attempts: 0 });
 
   async function crawl() {
     const next = state.pending.shift();
@@ -55,9 +56,15 @@ const state = {
           if (!state.found[hostname]) {
             state.found[hostname] = true;
             state.pending.push({
-              name: hosts[i].name
+              name: hosts[i].name,
+              attempts: 0
             });
           }
+        }
+      }
+      else {
+        if (++next.attempts < MAX_ATTEMPTS) {
+          state.pending.push(next);
         }
       }
     }

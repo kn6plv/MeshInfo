@@ -8,7 +8,7 @@ const FETCH_TIMEOUT = 30000;
 const MAX_RUNNING = 32;
 const MAX_ATTEMPTS = 3;
 
-const ROOT = process.argv[2] || 'KN6PLV-BrkOxfLA-Omni';
+const ROOT = process.argv[2] || 'localnode';
 const CSVFILE = "out.csv"
 const JSONFILE = "out.json"
 
@@ -100,21 +100,23 @@ const state = {
   const d = new Date();
   const now = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${d.getHours()}:${('0'+d.getMinutes()).substr(-2)}:${('0'+d.getSeconds()).substr(-2)}`;
   nodes.forEach(node => {
-    try {
-      csvtable.push(
-        `${node.node},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).ip || 'Unknown'},"${now}","${node.sysinfo.uptime}",`+
-        `a:3:{${node.sysinfo.loads.map((l,i) => 'i:'+i+';d:'+l.toFixed(2)+';').join('')}},`+
-        `"${node.node_details.model}",${node.node_details.firmware_version},`+
-        `${node.meshrf && node.meshrf.ssid || 'None'},${node.meshrf && node.meshrf.channel || 'None'},${node.meshrf && node.meshrf.chanbw || 'None'},`+
-        `${node.tunnels.tunnel_installed},${node.tunnels.active_tunnel_count},${node.lat || '"Not Available"'},${node.lon || '"Not Available"'},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'},`+
-        `${node.api_version},${node.node_details.board_id},${node.node_details.firmware_mfg},`+
-        `${node.grid_square || '"Not Available"'},${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'},`+
-        `"a:${(node.services_local || []).length}:{${(node.services_local || []).map((s,i)=> 'i:'+i+';a:3:{s:4:""name"";s:'+s.name.length+':""'+s.name+'"";s:8:""protocol"";s:'+s.protocol.length+':""'+s.protocol+'"";s:4:""link"";s:'+s.link.length+':""'+s.link+'"";}').join('')}}",0`
-      );
-      jsontable.push({ data: node });
-    }
-    catch (e) {
-      Log(e);
+    if (node.node.toLowerCase() !== 'localnode') {
+      try {
+        csvtable.push(
+          `${node.node},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).ip || 'Unknown'},"${now}","${node.sysinfo.uptime}",`+
+          `a:3:{${node.sysinfo.loads.map((l,i) => 'i:'+i+';d:'+l.toFixed(2)+';').join('')}},`+
+          `"${node.node_details.model}",${node.node_details.firmware_version},`+
+          `${node.meshrf && node.meshrf.ssid || 'None'},${node.meshrf && node.meshrf.channel || 'None'},${node.meshrf && node.meshrf.chanbw || 'None'},`+
+          `${node.tunnels.tunnel_installed},${node.tunnels.active_tunnel_count},${node.lat || '"Not Available"'},${node.lon || '"Not Available"'},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'},`+
+          `${node.api_version},${node.node_details.board_id},${node.node_details.firmware_mfg},`+
+          `${node.grid_square || '"Not Available"'},${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'},`+
+          `"a:${(node.services_local || []).length}:{${(node.services_local || []).map((s,i)=> 'i:'+i+';a:3:{s:4:""name"";s:'+s.name.length+':""'+s.name+'"";s:8:""protocol"";s:'+s.protocol.length+':""'+s.protocol+'"";s:4:""link"";s:'+s.link.length+':""'+s.link+'"";}').join('')}}",0`
+        );
+        jsontable.push({ data: node });
+      }
+      catch (e) {
+        Log(e);
+      }
     }
   });
 

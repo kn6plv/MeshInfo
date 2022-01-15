@@ -7,6 +7,7 @@ const Log = require('debug')('main');
 const FETCH_TIMEOUT = 30000;
 const MAX_RUNNING = 32;
 const MAX_ATTEMPTS = 3;
+const AGE_OUT = 24 * 60 * 60 * 1000;
 
 const ROOT = process.argv[2] || 'localnode';
 const CSVFILE = "out.csv"
@@ -142,11 +143,26 @@ async function readNode(name) {
 
 const state = {
   found: {},
-  populated: [],
+  populated: {},
   pending: [],
 };
 
 (async function() {
+
+  const now = Date.now();
+
+  // Read previous state and remove entries which are too old
+  try {
+    const oldjson = JSON.parse(fs.readFileSync(JSONFILE, { encoding: 'utf8' }));
+    oldjson.nodeInfo.forEach(node => {
+      if (now - node.data.lastseen < AGE_OUT) {
+        state.populated[node.data.node.toLowerCase()] = node.data;
+      }
+    });
+  }
+  catch (e) {
+    Log(e);
+  }
 
   state.found[ROOT.toLowerCase()] = true;
   state.pending.push({ name: ROOT, attempts: 0 });
@@ -156,7 +172,11 @@ const state = {
     if (next) {
       const node = await readNode(next.name);
       if (node) {
-        state.populated.push(node);
+        state.populated[node.node.toLowerCase()] = node;
+        node.lastseen = now;
+        if (!node.firstseen) {
+          node.firstseen = now;
+        }
         const hosts = node.hosts || [];
         for (let i = 0; i < hosts.length; i++) {
           const hostname = hosts[i].name.toLowerCase();
@@ -197,20 +217,20 @@ const state = {
   docrawl();
   await new Promise(resolve => done = resolve);
 
-  Log('Nodes: found', Object.keys(state.found).length, 'populated', state.populated.length);
+  const nodes = Object.values(state.populated).sort((a, b) => a.node.localeCompare(b.node));
+  Log('Nodes: found', Object.keys(state.found).length, 'populated', nodes.length);
 
   const csvtable = [];
   const jsontable = [];
 
   csvtable.push('node,wlan_ip,last_seen,uptime,loadavg,hardware,model,firmware_version,ssid,channel,chanbw,tunnel_installed,active_tunnel_count,lat,lon,wifi_mac_address,api_version,board_id,firmware_mfg,grid_square,lan_ip,services,location_fix');
-  const nodes = state.populated.sort((a, b) => a.node.localeCompare(b.node));
   const d = new Date();
-  const now = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${d.getHours()}:${('0'+d.getMinutes()).substr(-2)}:${('0'+d.getSeconds()).substr(-2)}`;
+  const lastseen = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${d.getHours()}:${('0'+d.getMinutes()).substr(-2)}:${('0'+d.getSeconds()).substr(-2)}`;
   nodes.forEach(node => {
     if (node.node.toLowerCase() !== 'localnode') {
       try {
         csvtable.push(
-          `${node.node},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).ip || 'Unknown'},"${now}","${node.sysinfo.uptime}",`+
+          `${node.node},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).ip || 'Unknown'},"${lastseen}","${node.sysinfo.uptime}",`+
           `a:3:{${node.sysinfo.loads.map((l,i) => 'i:'+i+';d:'+l.toFixed(2)+';').join('')}},`+
           `"${HARDWARE[node.node_details.board_id] || node.node_details.model}",` +
           `"${node.node_details.model}",${node.node_details.firmware_version},`+

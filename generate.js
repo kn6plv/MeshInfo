@@ -146,6 +146,7 @@ const state = {
 (async function() {
 
   const now = Date.now();
+  let lastbuilt = now;
 
   // Read previous state and remove entries which are too old
   try {
@@ -155,6 +156,7 @@ const state = {
         state.populated[node.data.node.toLowerCase()] = node.data;
       }
     });
+    lastbuilt = oldjson.date;
   }
   catch (e) {
     Log(e);
@@ -251,7 +253,7 @@ const state = {
   fs.writeFileSync(CSVFILE, csvtable.join("\n"));
   fs.writeFileSync(JSONFILE, JSON.stringify({
     version: "1",
-    date: new Date(),
+    date: nodes.length > 0 ? now : lastbuilt,
     nodeInfo: jsontable
   }));
 

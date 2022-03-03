@@ -8,7 +8,7 @@ const Log = require('debug')('main');
 const FETCH_TIMEOUT = 20000;
 const MAX_RUNNING = 32;
 const MAX_ATTEMPTS = 2;
-const AGE_OUT = 24 * 60 * 60 * 1000;
+const AGE_OUT = 7 * 24 * 60 * 60 * 1000;
 
 const ROOT = process.argv[2] || 'localnode';
 const CSVFILE = "out.csv"
@@ -128,9 +128,12 @@ async function readNode(name) {
       const ac = new AbortController();
       setTimeout(() => ac.abort(), FETCH_TIMEOUT);
       const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?&hosts=1&services_local=1&link_info=1`, { signal: ac.signal });
-      resolve(await req.json());
+      const v = await req.json();
+      console.log(`${name}: success`);
+      resolve(v);
     }
     catch (e) {
+      console.log(`${name}: failed`);
       Log('failed', name, e);
       resolve(null);
     }
@@ -178,12 +181,14 @@ const state = {
         const hosts = node.hosts || [];
         for (let i = 0; i < hosts.length; i++) {
           const hostname = hosts[i].name.toLowerCase();
-          if (!state.found[hostname]) {
-            state.found[hostname] = true;
-            state.pending.push({
-              name: hosts[i].name,
-              attempts: 0
-            });
+          if (!hostname.match(/^dtdlink\./i) && !hostname.match(/^mid\d+\./i)) {
+            if (!state.found[hostname]) {
+              state.found[hostname] = true;
+              state.pending.push({
+                name: hosts[i].name,
+                attempts: 0
+              });
+            }
           }
         }
       }
@@ -216,7 +221,7 @@ const state = {
   await new Promise(resolve => done = resolve);
 
   const nodes = Object.values(state.populated).sort((a, b) => a.node.localeCompare(b.node));
-  Log('Nodes: found', Object.keys(state.found).length, 'populated', nodes.length);
+  console.log('*** Nodes: found', Object.keys(state.found).length, 'populated', nodes.length);
 
   const csvtable = [];
   const jsontable = [];

@@ -6,7 +6,7 @@ const AbortController = require('abort-controller').AbortController;
 const Log = require('debug')('main');
 
 const FETCH_TIMEOUT = 20000;
-const MAX_RUNNING = 32;
+const MAX_RUNNING = 128;
 const MAX_ATTEMPTS = 2;
 const AGE_OUT = 7 * 24 * 60 * 60 * 1000;
 

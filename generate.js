@@ -243,7 +243,7 @@ const state = {
           `${node.tunnels.tunnel_installed},${node.tunnels.active_tunnel_count},${node.lat || '"Not Available"'},${node.lon || '"Not Available"'},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'},`+
           `${node.api_version},${node.node_details.board_id},${node.node_details.firmware_mfg},`+
           `${node.grid_square || '"Not Available"'},${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'},`+
-          `"a:${(node.services_local || []).length}:{${(node.services_local || []).map((s,i)=> 'i:'+i+';a:3:{s:4:""name"";s:'+s.name.length+':""'+s.name+'"";s:8:""protocol"";s:'+s.protocol.length+':""'+s.protocol+'"";s:4:""link"";s:'+s.link.length+':""'+s.link+'"";}').join('')}}",0` +
+          `"a:${(node.services_local || []).length}:{${(node.services_local || []).map((s,i)=> 'i:'+i+';a:3:{s:4:""name"";s:'+s.name.length+':""'+s.name+'"";s:8:""protocol"";s:'+s.protocol.length+':""'+s.protocol+'"";s:4:""link"";s:'+s.link.length+':""'+s.link+'"";}').join('')}}",0,` +
           `${node.lqm && node.lqm.enabled ? 'true' : 'false'}`
         );
         // Tidy

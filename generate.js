@@ -220,6 +220,21 @@ const state = {
   docrawl();
   await new Promise(resolve => done = resolve);
 
+  // Invent missing locations for nodes which are DtD attached to ones with locations
+  Object.values(state.populated).forEach(node => {
+    if (!node.lat || !node.lon) {
+      Object.values(node.link_info).forEach(link => {
+        if (link.linkType === "DTD") {
+          const linkNode = state.populated[link.hostname.toLowerCase()];
+          if (linkNode && linkNode.lat && linkNode.lon) {
+            node.lat = linkNode.lat;
+            node.lon = linkNode.lon;
+          }
+        }
+      });
+    }
+  });
+
   const nodes = Object.values(state.populated).sort((a, b) => a.node.localeCompare(b.node));
   console.log('*** Nodes: found', Object.keys(state.found).length, 'populated', nodes.length);
 

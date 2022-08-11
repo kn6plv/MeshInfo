@@ -3,6 +3,7 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
 const AbortController = require('abort-controller').AbortController;
+const Turf = require('@turf/turf');
 const Log = require('debug')('main');
 
 const FETCH_TIMEOUT = 20000;
@@ -140,6 +141,22 @@ async function readNode(name) {
   });
 }
 
+function latLonBearingDistance(lat, lon, bearing, distance) {
+  const brng = bearing / 180 * Math.PI;
+  const dR = distance / 6378100 // Radius of the Earth (m)
+
+  const lat1 = lat / 180 * Math.PI;
+  const lon1 = lon / 180 * Math.PI;
+
+  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(dR) + Math.cos(lat1) * Math.sin(dR) * Math.cos(brng));
+  const lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dR) * Math.cos(lat1), Math.cos(dR) - Math.sin(lat1) * Math.sin(lat2));
+
+  return {
+      lat: lat2 / Math.PI * 180,
+      lon: lon2 / Math.PI * 180
+  };
+}
+
 const state = {
   found: {},
   populated: {},
@@ -220,6 +237,7 @@ const state = {
   docrawl();
   await new Promise(resolve => done = resolve);
 
+  /*
   // Invent missing locations for nodes which are DtD attached to ones with locations
   Object.values(state.populated).forEach(node => {
     if (!node.lat || !node.lon) {
@@ -232,6 +250,62 @@ const state = {
           }
         }
       });
+    }
+  });
+  */
+
+  // Group nodes together based on their DtD links and proximity.
+  const groups = {};
+  const nodegroup = {};
+  Object.values(state.populated).forEach(node => {
+    const name = node.node.toLowerCase();
+    if (nodegroup[name]) {
+      nodegroup[name].nodes.push(node);
+    }
+    else {
+      groups[name] = {
+        nodes: [ node ]
+      };
+      nodegroup[name] = groups[name];
+      if (node.link_info) {
+        Object.values(node.link_info).forEach(link => {
+          if (link.linkType === "DTD") {
+            const linkName = link.hostname.toLowerCase();
+            if (node.lat && node.lon) {
+              const linkNode = state.populated[linkName];
+              if (linkNode && linkNode.lat && linkNode.lon) {
+                const dfrom = Turf.point([ node.lon, node.lat ]);
+                const dto = Turf.point([ linkNode.lon, linkNode.lat ]);
+                if (Turf.distance(dfrom, dto, { units: "meters" }) >= 50) {
+                  // Not a real DtD
+                  return;
+                }
+              }
+            }
+            nodegroup[linkName] = groups[name];
+          }
+        });
+      }
+    }
+  });
+
+  // Scan the node groups, and adjust the lat/lon measurements so the nodes are close but don't overlap
+  Object.values(groups).forEach(group => {
+    const nodes = group.nodes;
+    if (nodes.length == 1) {
+      return;
+    }
+    const baseNode = nodes.find(node => node.lat && node.lon);
+    const angle = 360 / (nodes.length - 1);
+    let rot = 0;
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      if (node !== baseNode) {
+        const nloc = latLonBearingDistance(baseNode.lat, baseNode.lon, rot, 20);
+        rot += angle;
+        node.lat = nloc.lat;
+        node.lon = nloc.lon;
+      }
     }
   });
 

@@ -274,7 +274,7 @@ const state = {
   fs.writeFileSync(CSVFILE, csvtable.join("\n"));
   fs.writeFileSync(JSONFILE, JSON.stringify({
     version: "1",
-    date: nodes.length > 0 ? now : lastbuilt,
+    date: nodes.length > 0 ? (now * 1000) : lastbuilt,
     nodeInfo: jsontable
   }));
 

@@ -8,7 +8,7 @@ const Log = require('debug')('main');
 const FETCH_TIMEOUT = 20000;
 const MAX_RUNNING = 128;
 const MAX_ATTEMPTS = 2;
-const AGE_OUT = 7 * 24 * 60 * 60 * 1000;
+const AGE_OUT = 7 * 24 * 60 * 60;
 
 const ROOT = process.argv[2] || 'localnode';
 const CSVFILE = "out.csv"
@@ -148,7 +148,7 @@ const state = {
 
 (async function() {
 
-  const now = Date.now();
+  const now = Math.floor(Date.now() / 1000);
   let lastbuilt = now;
 
   // Read previous state and remove entries which are too old
@@ -243,7 +243,7 @@ const state = {
 
   csvtable.push('node,wlan_ip,last_seen,uptime,loadavg,hardware,model,firmware_version,ssid,channel,chanbw,tunnel_installed,active_tunnel_count,lat,lon,wifi_mac_address,api_version,board_id,firmware_mfg,grid_square,lan_ip,services,location_fix,lqm');
   function seen(when) {
-    const d = new Date(when);
+    const d = new Date(when * 1000);
     return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${d.getHours()}:${('0'+d.getMinutes()).substr(-2)}:${('0'+d.getSeconds()).substr(-2)}`;
   }
   nodes.forEach(node => {

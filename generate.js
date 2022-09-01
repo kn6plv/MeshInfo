@@ -296,15 +296,17 @@ const state = {
       return;
     }
     const baseNode = nodes.find(node => node.lat && node.lon);
-    const angle = 360 / (nodes.length - 1);
-    let rot = 0;
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i];
-      if (node !== baseNode) {
-        const nloc = latLonBearingDistance(baseNode.lat, baseNode.lon, rot, 20);
-        rot += angle;
-        node.lat = nloc.lat;
-        node.lon = nloc.lon;
+    if (baseNode) {
+      const angle = 360 / (nodes.length - 1);
+      let rot = 0;
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        if (node !== baseNode) {
+          const nloc = latLonBearingDistance(baseNode.lat, baseNode.lon, rot, 20);
+          rot += angle;
+          node.lat = nloc.lat;
+          node.lon = nloc.lon;
+        }
       }
     }
   });

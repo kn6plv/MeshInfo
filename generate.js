@@ -328,7 +328,7 @@ const state = {
         delete node.hosts;
         jsontable.push({ data: node });
 
-        kml.push(`<Placemark><name>${node.node}</name><Point><extrude>1</extrude><altitudeMode>relativeToGround</altitudeMode><coordinates>${node.lon},${node.lat},10</coordinates></Point></Placemark>`);
+        kml.push(`<Placemark><name>${node.node}</name><styleUrl>#sm_nodes</styleUrl><Point><extrude>1</extrude><altitudeMode>relativeToGround</altitudeMode><coordinates>${node.lon},${node.lat},10</coordinates></Point></Placemark>`);
         Object.values(node.link_info || {}).forEach(link => {
           const host1 = node.node.toLowerCase();
           const host2 = link.hostname.toLowerCase();
@@ -350,13 +350,65 @@ const state = {
     }
   });
 
+  // KML Styles section
+  const kml_styles = `
+  <StyleMap id="sm_nodes">
+    <Pair>
+      <key>normal</key>
+      <styleUrl>#sn_nodes</styleUrl>
+    </Pair>
+    <Pair>
+      <key>highlight</key>
+      <styleUrl>#sh_nodes</styleUrl>
+    </Pair>
+  </StyleMap>
+  <Style id="sn_nodes">
+    <IconStyle>
+      <color>ff00ffff</color>
+      <scale>1.1</scale>
+      <Icon>
+        <href>http://maps.google.com/mapfiles/kml/shapes/target.png</href>
+      </Icon>
+      <hotSpot x="0.5"  y="0.5" xunits="fraction" yunits="fraction"/>
+    </IconStyle>
+    <LabelStyle>
+      <scale>0</scale>
+    </LabelStyle>
+  </Style>
+  <Style id="sh_nodes">
+    <IconStyle>
+      <color>ff00ffff</color>
+      <scale>1.4</scale>
+      <Icon>
+        <href>http://maps.google.com/mapfiles/kml/shapes/target.png</href>
+      </Icon>
+      <hotSpot x="0.5"  y="0.5" xunits="fraction" yunits="fraction"/>
+    </IconStyle>
+    <LabelStyle>
+      <scale>1.1</scale>
+    </LabelStyle>
+  </Style>
+  `
+  // Generate CSV File
   fs.writeFileSync(CSVFILE, csvtable.join("\n"));
+  // Generate JSON File
   fs.writeFileSync(JSONFILE, JSON.stringify({
     version: "1",
     date: nodes.length > 0 ? (now * 1000) : lastbuilt,
     nodeInfo: jsontable
   }));
-  fs.writeFileSync(KMLFILE, `<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Mesh Map</name><Folder><name>Nodes</name>${kml.join("")}</Folder><Folder><name>Links</name>${kmlpaths.join("")}</Folder></Document></kml>`);
+  // Generate KML File
+  fs.writeFileSync(KMLFILE, `
+  <?xml version="1.0" encoding="UTF-8"?>
+  <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document>
+    <name>Mesh Map</name>
+    <description><![CDATA[https://sfmap.xojs.org/]]></description>
+    <Folder><name>Nodes</name>${kml.join("")}</Folder>
+    <Folder><name>Paths</name>${kmlpaths.join("")}</Folder>
+  </Document>
+  </kml>
+  `);
 
   process.exit();
 

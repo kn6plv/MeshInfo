@@ -404,6 +404,7 @@ const state = {
   <Document>
     <name>Mesh Map</name>
     <description><![CDATA[https://sfmap.xojs.org/]]></description>
+    ${kml_styles}
     <Folder><name>Nodes</name>${kml.join("")}</Folder>
     <Folder><name>Paths</name>${kmlpaths.join("")}</Folder>
   </Document>

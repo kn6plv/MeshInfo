@@ -12,8 +12,9 @@ const MAX_ATTEMPTS = 2;
 const AGE_OUT = 7 * 24 * 60 * 60;
 
 const ROOT = process.argv[2] || 'localnode';
-const CSVFILE = "out.csv"
-const JSONFILE = "out.json"
+const CSVFILE = "out.csv";
+const JSONFILE = "out.json";
+const KMLFILE = "out.kml";
 
 const HARDWARE = {
   "Meraki MR16": "Meraki MR16",
@@ -234,25 +235,8 @@ const state = {
     }
   }
 
-  docrawl();
-  await new Promise(resolve => done = resolve);
-
-  /*
-  // Invent missing locations for nodes which are DtD attached to ones with locations
-  Object.values(state.populated).forEach(node => {
-    if (!node.lat || !node.lon) {
-      Object.values(node.link_info).forEach(link => {
-        if (link.linkType === "DTD") {
-          const linkNode = state.populated[link.hostname.toLowerCase()];
-          if (linkNode && linkNode.lat && linkNode.lon) {
-            node.lat = linkNode.lat;
-            node.lon = linkNode.lon;
-          }
-        }
-      });
-    }
-  });
-  */
+  //docrawl();
+  //await new Promise(resolve => done = resolve);
 
   // Group nodes together based on their DtD links and proximity.
   const groups = {};
@@ -316,6 +300,9 @@ const state = {
 
   const csvtable = [];
   const jsontable = [];
+  const kml = [];
+  const kmlpaths = [];
+  const links = {};
 
   csvtable.push('node,wlan_ip,last_seen,uptime,loadavg,hardware,model,firmware_version,ssid,channel,chanbw,tunnel_installed,active_tunnel_count,lat,lon,wifi_mac_address,api_version,board_id,firmware_mfg,grid_square,lan_ip,services,location_fix,lqm');
   function seen(when) {
@@ -340,6 +327,22 @@ const state = {
         // Tidy
         delete node.hosts;
         jsontable.push({ data: node });
+
+        kml.push(`<Placemark><name>${node.node}</name><Point><extrude>1</extrude><altitudeMode>relativeToGround</altitudeMode><coordinates>${node.lon},${node.lat},10</coordinates></Point></Placemark>`);
+        Object.values(node.link_info || {}).forEach(link => {
+          const host1 = node.node.toLowerCase();
+          const host2 = link.hostname.toLowerCase();
+          const k1 = `${host1}/${host2}`;
+          const k2 = `${host2}/${host1}`;
+          if (!links[k1] && !links[k2] && (link.linkType === "RF" || (link.linkType === "DTD" && nodegroup[host1] !== nodegroup[host2]))) {
+            const onode = state.populated[link.hostname.toLowerCase()];
+            if (onode) {
+              kmlpaths.push(`<Placemark><name>${node.node} to ${onode.node}</name><LineString><altitudeMode>relativeToGround</altitudeMode><coordinates>${node.lon},${node.lat},10 ${onode.lon},${onode.lat},10</coordinates></LineString></Placemark>`);
+            }
+          }
+          links[k1] = true;
+          links[k2] = true;
+        });
       }
       catch (e) {
         Log(e);
@@ -353,6 +356,7 @@ const state = {
     date: nodes.length > 0 ? (now * 1000) : lastbuilt,
     nodeInfo: jsontable
   }));
+  fs.writeFileSync(KMLFILE, `<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>${kml.join("")}${kmlpaths.join("")}</Document></kml>`);
 
   process.exit();
 

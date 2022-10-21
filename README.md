@@ -9,8 +9,7 @@ To run:
 
 Then wait a while (as walking a mesh takes a bit of time).
 
-
 Output URLs: 
-CSV:  https://sfmap.xojs.org/data/out.csv
-JSON: https://sfmap.xojs.org/data/out.json
-KML:  https://sfmap.xojs.org/data/out.kml
+- CSV:  https://sfmap.xojs.org/data/out.csv
+- JSON: https://sfmap.xojs.org/data/out.json
+- KML:  https://sfmap.xojs.org/data/out.kml

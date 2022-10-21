@@ -235,8 +235,8 @@ const state = {
     }
   }
 
-  //docrawl();
-  //await new Promise(resolve => done = resolve);
+  docrawl();
+  await new Promise(resolve => done = resolve);
 
   // Group nodes together based on their DtD links and proximity.
   const groups = {};

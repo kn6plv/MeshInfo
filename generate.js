@@ -356,7 +356,7 @@ const state = {
     date: nodes.length > 0 ? (now * 1000) : lastbuilt,
     nodeInfo: jsontable
   }));
-  fs.writeFileSync(KMLFILE, `<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>${kml.join("")}${kmlpaths.join("")}</Document></kml>`);
+  fs.writeFileSync(KMLFILE, `<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Mesh Map</name><Folder><name>Nodes</name>${kml.join("")}</Folder><Folder><name>Links</name>${kmlpaths.join("")}</Folder></Document></kml>`);
 
   process.exit();
 

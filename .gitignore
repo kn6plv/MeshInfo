@@ -2,3 +2,4 @@ node_modules
 *.csv
 *.csv.zip
 *.json
+*.kml

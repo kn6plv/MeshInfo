@@ -80,7 +80,7 @@ module.exports = {
         <Data name="tunnel_count">
           <value>${node.tunnels.active_tunnel_count}</value>
         </Data>
-        <Data name="lat
+        <Data name="lat">
           <value>${node.lat || '"Not Available"'}</value>
         </Data>
         <Data name="lon">

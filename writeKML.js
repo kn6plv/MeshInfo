@@ -52,8 +52,73 @@ module.exports = {
 
         update.nodes.forEach(node => {
             if (node.lat && node.lon) {
-                kml.push(`<Placemark><name>${node.node}</name><styleUrl>#sm_nodes</styleUrl><Point><extrude>1</extrude><altitudeMode>relativeToGround</altitudeMode><coordinates>${node.lon},${node.lat},10</coordinates></Point></Placemark>`);
-                Object.values(node.link_info || {}).forEach(link => {
+                kml.push(`<Placemark>
+      <name>${node.node}</name>
+      <styleUrl>#sm_nodes</styleUrl>
+      <ExtendedData>
+        <Data name="board_id">
+          <value>${node.node_details.board_id}</value>
+        </Data>
+        <Data name="model">
+          <value>${node.node_details.model}</value>
+        </Data>
+        <Data name="firmware_version">
+          <value>${node.node_details.firmware_version}</value>
+        </Data>
+        <Data name="ssid">
+          <value>${node.meshrf && node.meshrf.ssid || 'None'}</value>
+        </Data>
+        <Data name="channel">
+          <value>${node.meshrf && node.meshrf.channel || 'None'}</value>
+        </Data>
+        <Data name="chanbw">
+          <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
+        </Data>
+        <Data name="tunnel_installed">
+          <value>${node.tunnels.tunnel_installed || true}</value>
+        </Data>
+        <Data name="tunnel_count">
+          <value>${node.tunnels.active_tunnel_count}</value>
+        </Data>
+        <Data name="lat
+          <value>${node.lat || '"Not Available"'}</value>
+        </Data>
+        <Data name="lon">
+          <value>${node.lon || '"Not Available"'}</value>
+        </Data>
+        <Data name="wifi_mac_address">
+          <value>${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'}</value>
+        </Data>
+        <Data name="api_version">
+          <value>${node.api_version}</value>
+        </Data>
+        <Data name="firmware_mfg">
+          <value>${node.node_details.firmware_mfg}</value>
+        </Data>
+        <Data name="grid_square">
+          <value>${node.grid_square || '"Not Available"'}</value>
+        </Data>
+        <Data name="lan_ip">
+          <value>${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'}</value>
+        </Data>
+        <Data name="services">
+          <value>TODO</value>
+        </Data>
+        <Data name="location_fix">
+          <value>TODO</value>
+        </Data>
+        <Data name="lqm">
+          <value>${node.lqm && node.lqm.enabled ? 'true' : 'false'}</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <coordinates>${node.lon},${node.lat},10</coordinates>
+      </Point>
+    </Placemark>`);
+                
+              Object.values(node.link_info || {}).forEach(link => {
                     const host1 = node.node.toLowerCase();
                     const host2 = link.hostname.toLowerCase();
                     const k1 = `${host1}/${host2}`;

@@ -2,7 +2,7 @@
 const fs = require("fs");
 const Log = require("debug")("kml");
 
-// KML Styles section
+// KML shared Styles section
 const kml_styles = `
     <StyleMap id="sm_nodes">
       <Pair>
@@ -54,7 +54,20 @@ module.exports = {
         const kmlpaths = [];
         const links = {};
 
+        // Loop through nodes list, generate KML Placemark for each
         update.nodes.forEach(node => {
+
+            // Get band string from first digit of frequency field
+            var freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'None';
+            const BAND = {
+                "None": "None",
+                "5": "5ghz",
+                "2": "2ghz",
+                "3": "3ghz"
+            };
+            var band_name = HARDWARE[freq1] || 'Other';                
+            
+            // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {
                 kml.push(`
       <Placemark>
@@ -85,8 +98,14 @@ module.exports = {
           <Data name="channel">
             <value>${node.meshrf && node.meshrf.channel || 'None'}</value>
           </Data>
+          <Data name="freq">
+            <value>${node.meshrf && node.meshrf.freq || 'None'}</value>
+          </Data>
           <Data name="chanbw">
             <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
+          </Data>
+          <Data name="band">
+            <value>${band_name}</value>
           </Data>
           <Data name="wifi_mac_address">
             <value>${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'}</value>
@@ -126,6 +145,7 @@ module.exports = {
         </Point>
       </Placemark>`);
                 
+                
                 Object.values(node.link_info || {}).forEach(link => {
                     const host1 = node.node.toLowerCase();
                     const host2 = link.hostname.toLowerCase();
@@ -143,7 +163,7 @@ module.exports = {
             }
         });
 
-        // Generate KML File
+        // Generate KML File (inject styles, placemarks, paths, etc.)
         fs.writeFileSync(filename, `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document>

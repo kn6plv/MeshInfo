@@ -4,43 +4,43 @@ const Log = require("debug")("kml");
 
 // KML Styles section
 const kml_styles = `
-<StyleMap id="sm_nodes">
-  <Pair>
-    <key>normal</key>
-    <styleUrl>#sn_nodes</styleUrl>
-  </Pair>
-  <Pair>
-    <key>highlight</key>
-    <styleUrl>#sh_nodes</styleUrl>
-  </Pair>
-</StyleMap>
-<Style id="sn_nodes">
-  <IconStyle>
-    <color>ff00ffff</color>
-    <scale>1.1</scale>
-    <Icon>
-      <href>http://maps.google.com/mapfiles/kml/shapes/target.png</href>
-    </Icon>
-    <hotSpot x="0.5"  y="0.5" xunits="fraction" yunits="fraction"/>
-  </IconStyle>
-  <LabelStyle>
-    <scale>0</scale>
-  </LabelStyle>
-</Style>
-<Style id="sh_nodes">
-  <IconStyle>
-    <color>ff00ffff</color>
-    <scale>1.4</scale>
-    <Icon>
-      <href>http://maps.google.com/mapfiles/kml/shapes/target.png</href>
-    </Icon>
-    <hotSpot x="0.5"  y="0.5" xunits="fraction" yunits="fraction"/>
-  </IconStyle>
-  <LabelStyle>
-    <scale>1.1</scale>
-  </LabelStyle>
-</Style>
-`;
+    <StyleMap id="sm_nodes">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#sn_nodes</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#sh_nodes</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="sn_nodes">
+      <IconStyle>
+        <color>ff00ffff</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/shapes/target.png</href>
+        </Icon>
+        <hotSpot x="0.5"  y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="sh_nodes">
+      <IconStyle>
+        <color>ff00ffff</color>
+        <scale>1.4</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/shapes/target.png</href>
+        </Icon>
+        <hotSpot x="0.5"  y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    `;
 
 module.exports = {
 
@@ -52,71 +52,75 @@ module.exports = {
 
         update.nodes.forEach(node => {
             if (node.lat && node.lon) {
-                kml.push(`<Placemark>
-      <name>${node.node}</name>
-      <styleUrl>#sm_nodes</styleUrl>
-      <ExtendedData>
-        <Data name="board_id">
-          <value>${node.node_details.board_id}</value>
-        </Data>
-        <Data name="model">
-          <value>${node.node_details.model}</value>
-        </Data>
-        <Data name="firmware_version">
-          <value>${node.node_details.firmware_version}</value>
-        </Data>
-        <Data name="ssid">
-          <value>${node.meshrf && node.meshrf.ssid || 'None'}</value>
-        </Data>
-        <Data name="channel">
-          <value>${node.meshrf && node.meshrf.channel || 'None'}</value>
-        </Data>
-        <Data name="chanbw">
-          <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
-        </Data>
-        <Data name="tunnel_installed">
-          <value>${node.tunnels.tunnel_installed || true}</value>
-        </Data>
-        <Data name="tunnel_count">
-          <value>${node.tunnels.active_tunnel_count}</value>
-        </Data>
-        <Data name="lat">
-          <value>${node.lat || '"Not Available"'}</value>
-        </Data>
-        <Data name="lon">
-          <value>${node.lon || '"Not Available"'}</value>
-        </Data>
-        <Data name="wifi_mac_address">
-          <value>${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'}</value>
-        </Data>
-        <Data name="api_version">
-          <value>${node.api_version}</value>
-        </Data>
-        <Data name="firmware_mfg">
-          <value>${node.node_details.firmware_mfg}</value>
-        </Data>
-        <Data name="grid_square">
-          <value>${node.grid_square || '"Not Available"'}</value>
-        </Data>
-        <Data name="lan_ip">
-          <value>${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'}</value>
-        </Data>
-        <Data name="services">
-          <value>TODO</value>
-        </Data>
-        <Data name="location_fix">
-          <value>TODO</value>
-        </Data>
-        <Data name="lqm">
-          <value>${node.lqm && node.lqm.enabled ? 'true' : 'false'}</value>
-        </Data>
-      </ExtendedData>
-      <Point>
-        <extrude>1</extrude>
-        <altitudeMode>relativeToGround</altitudeMode>
-        <coordinates>${node.lon},${node.lat},10</coordinates>
-      </Point>
-    </Placemark>`);
+                kml.push(`
+      <Placemark>
+        <name>${node.node}</name>
+        <styleUrl>#sm_nodes</styleUrl>
+        <ExtendedData>
+          <Data name="hardware">
+            <value>TODO</value>
+          </Data>        
+          <Data name="board_id">
+            <value>${node.node_details.board_id}</value>
+          </Data>
+          <Data name="model">
+            <value>${node.node_details.model}</value>
+          </Data>
+          <Data name="firmware_mfg">
+            <value>${node.node_details.firmware_mfg}</value>
+          </Data>        
+          <Data name="firmware_version">
+            <value>${node.node_details.firmware_version}</value>
+          </Data>
+          <Data name="api_version">
+            <value>${node.api_version}</value>
+          </Data>
+          <Data name="ssid">
+            <value>${node.meshrf && node.meshrf.ssid || 'None'}</value>
+          </Data>
+          <Data name="channel">
+            <value>${node.meshrf && node.meshrf.channel || 'None'}</value>
+          </Data>
+          <Data name="chanbw">
+            <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
+          </Data>
+          <Data name="wifi_mac_address">
+            <value>${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'}</value>
+          </Data>
+          <Data name="lan_ip">
+            <value>${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'}</value>
+          </Data>
+          <Data name="lat">
+            <value>${node.lat || '"Not Available"'}</value>
+          </Data>
+          <Data name="lon">
+            <value>${node.lon || '"Not Available"'}</value>
+          </Data>
+          <Data name="grid_square">
+            <value>${node.grid_square || '"Not Available"'}</value>
+          </Data>
+          <Data name="location_fix">
+            <value>TODO</value>
+          </Data>
+          <Data name="tunnel_installed">
+            <value>${node.tunnels.tunnel_installed || true}</value>
+          </Data>
+          <Data name="tunnel_count">
+            <value>${node.tunnels.active_tunnel_count}</value>
+          </Data>
+          <Data name="services">
+            <value>TODO</value>
+          </Data>
+          <Data name="lqm">
+            <value>${node.lqm && node.lqm.enabled ? 'true' : 'false'}</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <extrude>1</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>${node.lon},${node.lat},10</coordinates>
+        </Point>
+      </Placemark>`);
                 
                 Object.values(node.link_info || {}).forEach(link => {
                     const host1 = node.node.toLowerCase();
@@ -142,8 +146,14 @@ module.exports = {
     <name>Mesh Map</name>
     <description><![CDATA[https://sfmap.xojs.org/]]></description>
     ${kml_styles}
-    <Folder><name>Nodes</name>${kml.join("\n")}</Folder>
-    <Folder><name>Paths</name>${kmlpaths.join("\n")}</Folder>
+    <Folder>
+      <name>Nodes</name>
+      ${kml.join("\n")}
+    </Folder>
+    <Folder>
+      <name>Paths</name>
+      ${kmlpaths.join("\n")}
+    </Folder>
   </Document>
   </kml>
 `);

@@ -54,18 +54,19 @@ module.exports = {
         const kmlpaths = [];
         const links = {};
 
+        const BAND = {
+            "None": "None",
+            "5": "5ghz",
+            "2": "2ghz",
+            "3": "3ghz"
+        };
+
         // Loop through nodes list, generate KML Placemark for each
         update.nodes.forEach(node => {
 
             // Get band string from first digit of frequency field
-            var freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'None';
-            const BAND = {
-                "None": "None",
-                "5": "5ghz",
-                "2": "2ghz",
-                "3": "3ghz"
-            };
-            var band_name = HARDWARE[freq1] || 'Other';                
+            const freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'None';
+            const band_name = BAND[freq1] || 'Other';                
             
             // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {

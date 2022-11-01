@@ -172,8 +172,8 @@ module.exports = {
         update.nodes.forEach(node => {
 
             // Get styleUrl based on 1st character of frequency field. 
-            const freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'N';
-            const styleUrl = node.meshrf && BAND_STYLE[freq1] || '#sm_nodes';
+            const freq1 = node.meshrf.freq && String(node.meshrf.freq)[0] || 'N';
+            const styleUrl = node.meshrf.freq && BAND_STYLE[freq1] || '#sm_nodes';
             
             // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {

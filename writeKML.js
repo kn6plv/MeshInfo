@@ -122,11 +122,11 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
 
-    <StyleMap id="sm_nodes_NoRF">
-      <Pair><key>normal</key><styleUrl>#sn_nodes_NoRF</styleUrl></Pair>
-      <Pair><key>highlight</key><styleUrl>#sh_nodes_NoRF</styleUrl></Pair>
+    <StyleMap id="sm_nodes_None">
+      <Pair><key>normal</key><styleUrl>#sn_nodes_None</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_nodes_None</styleUrl></Pair>
     </StyleMap>
-    <Style id="sn_nodes_NoRF">
+    <Style id="sn_nodes_None">
       <IconStyle>
         <scale>1.1</scale>
         <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
@@ -138,7 +138,7 @@ const kml_styles = `
       <BalloonStyle>
       </BalloonStyle>
     </Style>
-    <Style id="sh_nodes_NoRF">
+    <Style id="sh_nodes_None">
       <IconStyle>
         <scale>1.4</scale>
         <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
@@ -162,7 +162,7 @@ module.exports = {
         const links = {};
 
         const BAND = {
-            "N": "NoRF",
+            "N": "None",
             "5": "5ghz",
             "2": "2ghz",
             "3": "3ghz"
@@ -172,9 +172,9 @@ module.exports = {
         update.nodes.forEach(node => {
 
             // Get band from 1st digit of frequency field, generate band string & styleUrl
-            const freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'N';
+            const freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'Err';
             const band_name = BAND[freq1] || 'Other';
-            const styleUrl = '#sm_nodes_' + BAND[freq1] || '#sm_nodes'
+            const styleUrl = (band_name !== "Other") && ('#sm_nodes_' + BAND[freq1]) || '#sm_nodes'
             
             // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {

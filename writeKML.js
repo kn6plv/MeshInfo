@@ -122,11 +122,11 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
 
-    <StyleMap id="sm_nodes_None">
-      <Pair><key>normal</key><styleUrl>#sn_nodes_None</styleUrl></Pair>
-      <Pair><key>highlight</key><styleUrl>#sh_nodes_None</styleUrl></Pair>
+    <StyleMap id="sm_nodes_NoRF">
+      <Pair><key>normal</key><styleUrl>#sn_nodes_NoRF</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_nodes_NoRF</styleUrl></Pair>
     </StyleMap>
-    <Style id="sn_nodes_None">
+    <Style id="sn_nodes_NoRF">
       <IconStyle>
         <scale>1.1</scale>
         <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
@@ -138,7 +138,7 @@ const kml_styles = `
       <BalloonStyle>
       </BalloonStyle>
     </Style>
-    <Style id="sh_nodes_None">
+    <Style id="sh_nodes_NoRF">
       <IconStyle>
         <scale>1.4</scale>
         <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
@@ -161,20 +161,18 @@ module.exports = {
         const kmlpaths = [];
         const links = {};
 
-        const BAND = {
-            "N": "None",
-            "5": "5ghz",
-            "2": "2ghz",
-            "3": "3ghz"
+        const BAND_STYLE = {
+            "N": "#sm_nodes_NoRF",
+            "5": "#sm_nodes_5ghz",
+            "2": "#sm_nodes_2ghz",
+            "3": "#sm_nodes_3ghz"
         };
 
         // Loop through nodes list, generate KML Placemark for each
         update.nodes.forEach(node => {
 
-            // Get band from 1st digit of frequency field, generate band string & styleUrl
-            const freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'Err';
-            const band_name = BAND[freq1] || 'Other';
-            const styleUrl = (band_name !== "Other") && ('#sm_nodes_' + BAND[freq1]) || '#sm_nodes'
+            // Get styleUrl based on 1st character of frequency field. 
+            const styleUrl = node.meshrf && BAND_STYLE[String(node.meshrf.freq)[0]] || '#sm_nodes'
             
             // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {
@@ -212,9 +210,6 @@ module.exports = {
           </Data>
           <Data name="chanbw">
             <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
-          </Data>
-          <Data name="band">
-            <value>${band_name}</value>
           </Data>
           <Data name="wifi_mac_address">
             <value>${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'}</value>

@@ -5,22 +5,14 @@ const Log = require("debug")("kml");
 // KML shared Styles section
 const kml_styles = `
     <StyleMap id="sm_nodes">
-      <Pair>
-        <key>normal</key>
-        <styleUrl>#sn_nodes</styleUrl>
-      </Pair>
-      <Pair>
-        <key>highlight</key>
-        <styleUrl>#sh_nodes</styleUrl>
-      </Pair>
+      <Pair><key>normal</key><styleUrl>#sn_nodes</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_nodes</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_nodes">
       <IconStyle>
-        <color>ff00ccff</color>
+        <color>ff00ddff</color>
         <scale>1.1</scale>
-        <Icon>
-          <href>http://maps.google.com/mapfiles/kml/shapes/target.png</href>
-        </Icon>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/target.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -31,11 +23,9 @@ const kml_styles = `
     </Style>
     <Style id="sh_nodes">
       <IconStyle>
-        <color>ff00ccff</color>
+        <color>ff00ddff</color>
         <scale>1.4</scale>
-        <Icon>
-          <href>http://maps.google.com/mapfiles/kml/shapes/target.png</href>
-        </Icon>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/target.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -44,6 +34,123 @@ const kml_styles = `
       <BalloonStyle>
       </BalloonStyle>
     </Style>
+    
+    <StyleMap id="sm_nodes_2ghz">
+      <Pair><key>normal</key><styleUrl>#sn_nodes_2ghz</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_nodes_2ghz</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_nodes_2ghz">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon><href>https://sfmap.xojs.org/purpleRadioCircle-icon.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_nodes_2ghz">
+      <IconStyle>
+        <scale>1.4</scale>
+        <Icon><href>https://sfmap.xojs.org/purpleRadioCircle-icon.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+
+    <StyleMap id="sm_nodes_3ghz">
+      <Pair><key>normal</key><styleUrl>#sn_nodes_3ghz</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_nodes_3ghz</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_nodes_3ghz">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon><href>https://sfmap.xojs.org/blueRadioCircle-icon.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_nodes_3ghz">
+      <IconStyle>
+        <scale>1.4</scale>
+        <Icon><href>https://sfmap.xojs.org/blueRadioCircle-icon.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    
+    <StyleMap id="sm_nodes_5ghz">
+      <Pair><key>normal</key><styleUrl>#sn_nodes_5ghz</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_nodes_5ghz</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_nodes_5ghz">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon><href>https://sfmap.xojs.org/goldRadioCircle-icon.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_nodes_5ghz">
+      <IconStyle>
+        <scale>1.4</scale>
+        <Icon><href>https://sfmap.xojs.org/goldRadioCircle-icon.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+
+    <StyleMap id="sm_nodes_NoRF">
+      <Pair><key>normal</key><styleUrl>#sn_nodes_NoRF</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_nodes_NoRF</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_nodes_NoRF">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_nodes_NoRF">
+      <IconStyle>
+        <scale>1.4</scale>
+        <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    
 `;
 
 module.exports = {
@@ -55,7 +162,7 @@ module.exports = {
         const links = {};
 
         const BAND = {
-            "None": "None",
+            "N": "NoRF",
             "5": "5ghz",
             "2": "2ghz",
             "3": "3ghz"
@@ -64,16 +171,17 @@ module.exports = {
         // Loop through nodes list, generate KML Placemark for each
         update.nodes.forEach(node => {
 
-            // Get band string from first digit of frequency field
-            const freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'None';
-            const band_name = BAND[freq1] || 'Other';                
+            // Get band from 1st digit of frequency field, generate band string & styleUrl
+            const freq1 = node.meshrf && String(node.meshrf.freq)[0] || 'N';
+            const band_name = BAND[freq1] || 'Other';
+            const styleUrl = '#sm_nodes_' + BAND[freq1] || '#sm_nodes'
             
             // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {
                 kml.push(`
       <Placemark>
         <name>${node.node}</name>
-        <styleUrl>#sm_nodes</styleUrl>
+        <styleUrl>${styleUrl}</styleUrl>
         <ExtendedData>
           <Data name="hardware">
             <value>TODO</value>

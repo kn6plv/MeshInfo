@@ -19,7 +19,7 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>bbffffff</color>
+        <color>00ffffff</color>
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
@@ -37,7 +37,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1</width>
+        <width>1.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -57,7 +57,7 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>bbffffff</color>
+        <color>00ffffff</color>
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
@@ -74,7 +74,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1</width>
+        <width>1.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -94,7 +94,7 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>bbffffff</color>
+        <color>0ffffff</color>
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
@@ -111,7 +111,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1</width>
+        <width>1.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -131,7 +131,7 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>bbffffff</color>
+        <color>00ffffff</color>
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
@@ -148,7 +148,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1</width>
+        <width>1.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -168,7 +168,7 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>bbffffff</color>
+        <color>00ffffff</color>
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
@@ -185,7 +185,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1</width>
+        <width>1.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -395,13 +395,29 @@ module.exports = {
             <value>${node.lqm && node.lqm.enabled ? 'true' : 'false'}</value>
           </Data>
         </ExtendedData>
-        <Point>
-          <extrude>1</extrude>
-          <altitudeMode>relativeToGround</altitudeMode>
-          <coordinates>${node.lon},${node.lat},10</coordinates>
-        </Point>
-      </Placemark>`);
+        <MultiGeometry>
+          <Point>
+            <extrude>1</extrude>
+            <altitudeMode>relativeToGround</altitudeMode>
+            <coordinates>${node.lon},${node.lat},10</coordinates>
+          </Point>`);
+            
+
+                // loop through the node's links and generate lines
                 Object.values(node.link_info || {}).forEach(link => {
+                    
+                    // process link for Node Placemark multigeometry lines
+                      // Note: copied "onode" code from below to make this line: 
+                    const node2 = update.nodes.find(n => n.node.toLowerCase() == link.hostname.toLowerCase());
+                    // push linestring into Node Placemark multigoemetry
+                    if (node2 && node2.lat && node2.lon) {
+                        kml.push(`
+          <LineString>
+            <altitudeMode>relativeToGround</altitudeMode>
+            <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
+          </LineString>`);
+                    
+                    // process link for Paths Placemarks
                     const host1 = node.node.toLowerCase();
                     const host2 = link.hostname.toLowerCase();
                     const k1 = `${host1}/${host2}`;
@@ -440,11 +456,22 @@ module.exports = {
                     }
                     links[k1] = true;
                     links[k2] = true;
+                    
                 });
-            }
-        });
+                // end of push that writes most of Node Placemark
 
-        // Generate KML File (inject styles, placemarks, paths, etc.)
+                // push end of main Node Placemark
+                kml.push(`
+        </MultiGeometry>
+      </Placemark>`);
+
+            }
+            // end of IF statement which generates main Placemark
+                                                            
+        });
+        // end of loop through nodes list
+
+        // Generate overall KML File (inject styles, node placemarks, paths placemarks, etc.)
         fs.writeFileSync(filename, `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document>
@@ -460,8 +487,8 @@ module.exports = {
       ${kmlpaths.join("\n")}
     </Folder>
   </Document>
-</kml>
-`);
+</kml>`);
+                
     }
 
 }

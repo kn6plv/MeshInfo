@@ -403,60 +403,57 @@ module.exports = {
           </Point>`);
             
 
+                const host1 = node.node.toLowerCase();
                 // loop through the node's links and generate lines
                 Object.values(node.link_info || {}).forEach(link => {
                     
                     // process link for Node Placemark multigeometry lines
-                      // Note: copied "onode" code from below to make this line: 
                     const node2 = update.nodes.find(n => n.node.toLowerCase() == link.hostname.toLowerCase());
+
                     // push linestring into Node Placemark multigoemetry
                     if (node2 && node2.lat && node2.lon) {
+                        const host2 = node2.node.toLowerCase();
                         kml.push(`
           <LineString>
             <altitudeMode>relativeToGround</altitudeMode>
             <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
           </LineString>`);
                     
-                    // process link for Paths Placemarks
-                    const host1 = node.node.toLowerCase();
-                    const host2 = link.hostname.toLowerCase();
-                    const k1 = `${host1}/${host2}`;
-                    const k2 = `${host2}/${host1}`;
-                    // Process links if we've not seen them already
-                    if (!(links[k1] || links[k2])) {
-                        switch (link.linkType) {
-                            case "DTD":
-                                // DTD links in the game group are local connections - ignore them.
-                                // DTD links in different groups are backbone links
-                                if (update.groups[host1] === update.groups[host2]) {
-                                    break;
-                                }
-                                // Backbone link - fall through ...
-                            case "RF":
-                                const onode = update.nodes.find(n => n.node.toLowerCase() == host2);
-                                const path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
-                                if (onode && onode.lat && onode.lon) {
+                        // process link for Paths Placemarks
+                        const k1 = `${host1}/${host2}`;
+                        const k2 = `${host2}/${host1}`;
+                        // Process links if we've not seen them already
+                        if (!(links[k1] || links[k2])) {
+                            switch (link.linkType) {
+                                case "DTD":
+                                    // DTD links in the game group are local connections - ignore them.
+                                    // DTD links in different groups are backbone links
+                                    if (update.groups[host1] === update.groups[host2]) {
+                                        break;
+                                    }
+                                    // Backbone link - fall through ...
+                                case "RF":
+                                    const path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
                                     kmlpaths.push(`
       <Placemark>
         <name>${link.linkType || 'Other'} Link</name>
         <description><![CDATA[
-          ${node.node} to ${onode.node}
+          ${node.node} to ${node2.node}
         ]]></description>
         <styleUrl>${path_styleUrl}</styleUrl>
         <LineString>
           <altitudeMode>relativeToGround</altitudeMode>
-          <coordinates>${node.lon},${node.lat},10 ${onode.lon},${onode.lat},10</coordinates>
+          <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
         </LineString>
       </Placemark>`);
-                                }
-                                break;
-                            default:
-                                break;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+                        links[k1] = true;
+                        links[k2] = true;
                     }
-                    links[k1] = true;
-                    links[k2] = true;
-                    
                 });
                 // end of push that writes most of Node Placemark
 

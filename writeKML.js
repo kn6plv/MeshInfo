@@ -18,6 +18,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>0</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -31,6 +35,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>1.1</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>1</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -48,6 +56,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>0</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -60,6 +72,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>1.1</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>1</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -77,6 +93,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>0</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -89,6 +109,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>1.1</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>1</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -106,6 +130,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>0</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -118,6 +146,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>1.1</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>1</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -135,6 +167,10 @@ const kml_styles = `
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>0</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
@@ -147,10 +183,118 @@ const kml_styles = `
       <LabelStyle>
         <scale>1.1</scale>
       </LabelStyle>
+      <LineStyle>
+        <color>bbffffff</color>
+        <width>1</width>
+      </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
     
+    <StyleMap id="sm_path_rf">
+      <Pair><key>normal</key><styleUrl>#sn_path_rf</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_path_rf</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_path_rf">
+      <LineStyle>
+        <color>dd00ff00</color>
+        <width>1</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_path_rf">
+      <LineStyle>
+        <color>ff00ff00</color>
+        <width>2</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    
+    <StyleMap id="sm_path_dtd">
+      <Pair><key>normal</key><styleUrl>#sn_path_dtd</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_path_dtd</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_path_dtd">
+      <LineStyle>
+        <color>dd828282</color>
+        <width>1</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_path_dtd">
+      <LineStyle>
+        <color>ff828282</color>
+        <width>2</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    
+    <StyleMap id="sm_path_tun">
+      <Pair><key>normal</key><styleUrl>#sn_path_tun</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_path_tun</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_path_tun">
+      <LineStyle>
+        <color>dd00ff00</color>
+        <width>1</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_path_tun">
+      <LineStyle>
+        <color>ff00ff00</color>
+        <width>2</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    
+    <StyleMap id="sm_path_bb">
+      <Pair><key>normal</key><styleUrl>#sn_path_bb</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_path_bb</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_path_bb">
+      <LineStyle>
+        <color>ddff7800</color>
+        <width>1</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_path_bb">
+      <LineStyle>
+        <color>ffff7800</color>
+        <width>2</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    
+    <StyleMap id="sm_path_other">
+      <Pair><key>normal</key><styleUrl>#sn_path_other</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_path_other</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_path_other">
+      <LineStyle>
+        <color>ddffffff</color>
+        <width>1</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_path_other">
+      <LineStyle>
+        <color>ffffffff</color>
+        <width>2</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>   
 `;
 
 module.exports = {
@@ -167,20 +311,28 @@ module.exports = {
             "2": "#sm_nodes_2ghz",
             "3": "#sm_nodes_3ghz"
         };
+        
+        const PATH_STYLE = {
+            "RF": "#sm_path_rf",  
+            "DTD": "#sm_path_dtd",
+            "TUN": "#sm_path_tun",
+            "BB": "#sm_path_bb"
+        };
 
         // Loop through nodes list, generate KML Placemark for each
         update.nodes.forEach(node => {
 
             // Get styleUrl based on 1st character of frequency field. 
-            const freq1 = node.meshrf.freq && String(node.meshrf.freq)[0] || 'N';
-            const styleUrl = node.meshrf.freq && BAND_STYLE[freq1] || '#sm_nodes';
+            let freq1 = 'N';
+            freq1 = node.meshrf.freq && String(node.meshrf.freq)[0] || 'N';
+            const node_styleUrl = node.meshrf.freq && BAND_STYLE[freq1] || '#sm_nodes';
             
             // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {
                 kml.push(`
       <Placemark>
         <name>${node.node}</name>
-        <styleUrl>${styleUrl}</styleUrl>
+        <styleUrl>${node_styleUrl}</styleUrl>
         <ExtendedData>
           <Data name="hardware">
             <value>TODO</value>
@@ -209,6 +361,7 @@ module.exports = {
           <Data name="freq">
             <value>${node.meshrf && node.meshrf.freq || 'None'}</value>
           </Data>
+          <!-- DEBUG: freq1 = ${freq1} , band_style = ${BAND_STYLE[freq1]} -->
           <Data name="chanbw">
             <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
           </Data>
@@ -258,8 +411,20 @@ module.exports = {
                     const k2 = `${host2}/${host1}`;
                     if (!links[k1] && !links[k2] && (link.linkType === "RF" || (link.linkType === "DTD" && update.groups[host1] !== update.groups[host2]))) {
                         const onode = update.nodes.find(n => n.node.toLowerCase() == host2);
+                        const path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
                         if (onode && onode.lat && onode.lon) {
-                            kmlpaths.push(`<Placemark><name>${node.node} to ${onode.node}</name><LineString><altitudeMode>relativeToGround</altitudeMode><coordinates>${node.lon},${node.lat},10 ${onode.lon},${onode.lat},10</coordinates></LineString></Placemark>`);
+                            kmlpaths.push(`
+      <Placemark>
+        <name>${link.linkType || 'Other'} Link</name>
+        <description><![CDATA[
+          ${node.node} to ${onode.node}
+        ]]></description>
+        <styleUrl>${path_styleUrl}</styleUrl>
+        <LineString>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>${node.lon},${node.lat},10 ${onode.lon},${onode.lat},10</coordinates>
+        </LineString>
+      </Placemark>`);
                         }
                     }
                     links[k1] = true;

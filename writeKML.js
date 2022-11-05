@@ -323,8 +323,7 @@ module.exports = {
         update.nodes.forEach(node => {
 
             // Get styleUrl based on 1st character of frequency field. 
-            let freq1 = 'N';
-            freq1 = node.meshrf.freq && String(node.meshrf.freq)[0] || 'N';
+            const freq1 = node.meshrf.freq && String(node.meshrf.freq)[0] || 'N';
             const node_styleUrl = node.meshrf.freq && BAND_STYLE[freq1] || '#sm_nodes';
             
             // check that node has location data, if so generate Placemark
@@ -402,18 +401,26 @@ module.exports = {
           <coordinates>${node.lon},${node.lat},10</coordinates>
         </Point>
       </Placemark>`);
-                
-                
                 Object.values(node.link_info || {}).forEach(link => {
                     const host1 = node.node.toLowerCase();
                     const host2 = link.hostname.toLowerCase();
                     const k1 = `${host1}/${host2}`;
                     const k2 = `${host2}/${host1}`;
-                    if (!links[k1] && !links[k2] && (link.linkType === "RF" || (link.linkType === "DTD" && update.groups[host1] !== update.groups[host2]))) {
-                        const onode = update.nodes.find(n => n.node.toLowerCase() == host2);
-                        const path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
-                        if (onode && onode.lat && onode.lon) {
-                            kmlpaths.push(`
+                    // Process links if we've not seen them already
+                    if (!(links[k1] || links[k2])) {
+                        switch (link.linkType) {
+                            case "DTD":
+                                // DTD links in the game group are local connections - ignore them.
+                                // DTD links in different groups are backbone links
+                                if (update.groups[host1] === update.groups[host2]) {
+                                    break;
+                                }
+                                // Backbone link - fall through ...
+                            case "RF":
+                                const onode = update.nodes.find(n => n.node.toLowerCase() == host2);
+                                const path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
+                                if (onode && onode.lat && onode.lon) {
+                                    kmlpaths.push(`
       <Placemark>
         <name>${link.linkType || 'Other'} Link</name>
         <description><![CDATA[
@@ -425,6 +432,10 @@ module.exports = {
           <coordinates>${node.lon},${node.lat},10 ${onode.lon},${onode.lat},10</coordinates>
         </LineString>
       </Placemark>`);
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
                     links[k1] = true;

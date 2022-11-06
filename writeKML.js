@@ -201,6 +201,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>dd00ff00</color>
         <width>1</width>
@@ -214,6 +217,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>ff00ff00</color>
         <width>3</width>
@@ -232,6 +238,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>dd00ffff</color>
         <width>1</width>
@@ -245,6 +254,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>ff00ffff</color>
         <width>3</width>
@@ -263,6 +275,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>dd828282</color>
         <width>1</width>
@@ -276,6 +291,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>ff828282</color>
         <width>3</width>
@@ -294,6 +312,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>ddff00ff</color>
         <width>1</width>
@@ -307,6 +328,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>ffff00ff</color>
         <width>3</width>
@@ -325,6 +349,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>ddffffff</color>
         <width>1</width>
@@ -338,6 +365,9 @@ const kml_styles = `
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
       <LineStyle>
         <color>ffffffff</color>
         <width>3</width>
@@ -366,7 +396,8 @@ module.exports = {
             "RF": "#sm_path_rf",  
             "DTD": "#sm_path_dtd",
             "TUN": "#sm_path_tun",
-            "BB": "#sm_path_bb"
+            "BB": "#sm_path_bb",
+            "Other": "#sm_path_other"
         };
 
         // Loop through nodes list, generate KML Placemark for each
@@ -451,7 +482,7 @@ module.exports = {
             <altitudeMode>relativeToGround</altitudeMode>
             <coordinates>${node.lon},${node.lat},10</coordinates>
           </Point>`);
-            
+                
 
                 const host1 = node.node.toLowerCase();
                 // loop through the node's links and generate lines
@@ -471,25 +502,43 @@ module.exports = {
                         // process link for Paths Placemarks
                         const k1 = `${host1}/${host2}`;
                         const k2 = `${host2}/${host1}`;
+                        let path_type = 'Other';
                         // Process links if we've not seen them already
                         if (!(links[k1] || links[k2])) {
+                            
+                            // detect link type and set styleUrl
                             switch (link.linkType) {
                                 case "DTD":
                                     // DTD links in the game group are local connections - ignore them.
                                     // DTD links in different groups are backbone links
                                     if (update.groups[host1] === update.groups[host2]) {
+                                        // path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
+                                        path_type = 'DTD';
                                         break;
                                     }
                                     // Backbone link - fall through ...
+                                    path_type = 'BB';
+                                    break;
                                 case "RF":
-                                    const path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
-                                    kmlpaths.push(`
+                                    // const path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
+                                    path_type = 'RF';
+                                    break;
+                                case "TUN":
+                                    path_type = 'TUN';
+                                    break;
+                                default:
+                                    path_type = 'Other';
+                                    break;                                    
+                            }
+                            
+                            // Write Path placemark, insert styleUrl, path data & node data        
+                            kmlpaths.push(`
       <Placemark>
-        <name>${link.linkType || 'Other'} Link</name>
+        <name>${path_type || 'Other'} Link</name>
         <description><![CDATA[
-          ${node.node} to ${node2.node}
+          ${node.node}<br/>- to- <br/>${node2.node}
         ]]></description>
-        <styleUrl>${path_styleUrl}</styleUrl>
+        <styleUrl>${PATH_STYLE[path_type] || '#sm_path_other'}</styleUrl>
         <MultiGeometry>
           <LineString>
             <altitudeMode>relativeToGround</altitudeMode>
@@ -505,14 +554,15 @@ module.exports = {
           </Point>          
         </MultiGeometry>
       </Placemark>`);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            
                         }
+                        // end of IF that checks whether we've seen a link before
+                        
                         links[k1] = true;
                         links[k2] = true;
                     }
+                    // end of loop that processes links
+                    
                 });
                 // end of push that writes most of Node Placemark
 

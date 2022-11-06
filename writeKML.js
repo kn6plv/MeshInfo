@@ -37,7 +37,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1.5</width>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -74,7 +74,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1.5</width>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -111,7 +111,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1.5</width>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -148,7 +148,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1.5</width>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -185,7 +185,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>1.5</width>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -196,6 +196,11 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_rf</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_rf">
+      <IconStyle>
+        <scale>0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
         <color>dd00ff00</color>
         <width>1</width>
@@ -204,9 +209,14 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_rf">
+      <IconStyle>
+        <scale>3</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
         <color>ff00ff00</color>
-        <width>2</width>
+        <width>3</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -217,17 +227,27 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_dtd</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_dtd">
+      <IconStyle>
+        <scale>0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
-        <color>dd828282</color>
+        <color>dd00ffff</color>
         <width>1</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_dtd">
+      <IconStyle>
+        <scale>3</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
-        <color>ff828282</color>
-        <width>2</width>
+        <color>ff00ffff</color>
+        <width>3</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -238,17 +258,27 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_tun</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_tun">
+      <IconStyle>
+        <scale>0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
-        <color>dd00ff00</color>
+        <color>dd828282</color>
         <width>1</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_tun">
+      <IconStyle>
+        <scale>3</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
-        <color>ff00ff00</color>
-        <width>2</width>
+        <color>ff828282</color>
+        <width>3</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -259,17 +289,27 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_bb</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_bb">
+      <IconStyle>
+        <scale>0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
-        <color>ddff7800</color>
+        <color>ddff00ff</color>
         <width>1</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_bb">
+      <IconStyle>
+        <scale>3</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
-        <color>ffff7800</color>
-        <width>2</width>
+        <color>ffff00ff</color>
+        <width>3</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -280,6 +320,11 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_other</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_other">
+      <IconStyle>
+        <scale>0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
         <color>ddffffff</color>
         <width>1</width>
@@ -288,9 +333,14 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_other">
+      <IconStyle>
+        <scale>3</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
       <LineStyle>
         <color>ffffffff</color>
-        <width>2</width>
+        <width>3</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -324,7 +374,7 @@ module.exports = {
 
             // Get styleUrl based on 1st character of frequency field. 
             const freq1 = node.meshrf.freq && String(node.meshrf.freq)[0] || 'N';
-            const node_styleUrl = node.meshrf.freq && BAND_STYLE[freq1] || '#sm_nodes';
+            const node_styleUrl = node.meshrf && BAND_STYLE[freq1] || '#sm_nodes';
             
             // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {
@@ -413,8 +463,7 @@ module.exports = {
                     // push linestring into Node Placemark multigoemetry
                     if (node2 && node2.lat && node2.lon) {
                         const host2 = node2.node.toLowerCase();
-                        kml.push(`
-          <LineString>
+                        kml.push(`          <LineString>
             <altitudeMode>relativeToGround</altitudeMode>
             <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
           </LineString>`);
@@ -441,10 +490,20 @@ module.exports = {
           ${node.node} to ${node2.node}
         ]]></description>
         <styleUrl>${path_styleUrl}</styleUrl>
-        <LineString>
-          <altitudeMode>relativeToGround</altitudeMode>
-          <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
-        </LineString>
+        <MultiGeometry>
+          <LineString>
+            <altitudeMode>relativeToGround</altitudeMode>
+            <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
+          </LineString>
+          <Point>
+            <altitudeMode>relativeToGround</altitudeMode>
+            <coordinates>${node.lon},${node.lat},10</coordinates>
+          </Point>
+          <Point>
+            <altitudeMode>relativeToGround</altitudeMode>
+            <coordinates>${node2.lon},${node2.lat},10</coordinates>
+          </Point>          
+        </MultiGeometry>
       </Placemark>`);
                                     break;
                                 default:
@@ -458,8 +517,7 @@ module.exports = {
                 // end of push that writes most of Node Placemark
 
                 // push end of main Node Placemark
-                kml.push(`
-        </MultiGeometry>
+                kml.push(`        </MultiGeometry>
       </Placemark>`);
 
             }

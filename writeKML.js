@@ -28,7 +28,7 @@ const kml_styles = `
     <Style id="sh_nodes">
       <IconStyle>
         <color>ff00ddff</color>
-        <scale>1.4</scale>
+        <scale>1.5</scale>
         <Icon><href>http://maps.google.com/mapfiles/kml/shapes/target.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
@@ -37,7 +37,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>2</width>
+        <width>4</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -65,7 +65,7 @@ const kml_styles = `
     </Style>
     <Style id="sh_nodes_2ghz">
       <IconStyle>
-        <scale>1.4</scale>
+        <scale>1.5</scale>
         <Icon><href>https://sfmap.xojs.org/purpleRadioCircle-icon.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
@@ -74,7 +74,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>2</width>
+        <width>4</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -102,7 +102,7 @@ const kml_styles = `
     </Style>
     <Style id="sh_nodes_3ghz">
       <IconStyle>
-        <scale>1.4</scale>
+        <scale>1.5</scale>
         <Icon><href>https://sfmap.xojs.org/blueRadioCircle-icon.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
@@ -111,7 +111,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>2</width>
+        <width>4</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -139,7 +139,7 @@ const kml_styles = `
     </Style>
     <Style id="sh_nodes_5ghz">
       <IconStyle>
-        <scale>1.4</scale>
+        <scale>1.5</scale>
         <Icon><href>https://sfmap.xojs.org/goldRadioCircle-icon.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
@@ -148,7 +148,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>2</width>
+        <width>4</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -176,7 +176,7 @@ const kml_styles = `
     </Style>
     <Style id="sh_nodes_NoRF">
       <IconStyle>
-        <scale>1.4</scale>
+        <scale>1.5</scale>
         <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
@@ -185,7 +185,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>2</width>
+        <width>4</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -205,8 +205,8 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>dd00ff00</color>
-        <width>1</width>
+        <color>cc00ff00</color>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -222,7 +222,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ff00ff00</color>
-        <width>3</width>
+        <width>3.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -243,7 +243,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>dd00ffff</color>
-        <width>1</width>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -259,7 +259,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ff00ffff</color>
-        <width>3</width>
+        <width>3.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -279,8 +279,8 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>dd828282</color>
-        <width>1</width>
+        <color>dd888888</color>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -295,8 +295,8 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>ff828282</color>
-        <width>3</width>
+        <color>ff888888</color>
+        <width>3.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -316,8 +316,8 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>ddff00ff</color>
-        <width>1</width>
+        <color>dd0055ff</color>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -332,8 +332,8 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>ffff00ff</color>
-        <width>3</width>
+        <color>ff0055ff</color>
+        <width>3.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -354,7 +354,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ddffffff</color>
-        <width>1</width>
+        <width>2</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -370,7 +370,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ffffffff</color>
-        <width>3</width>
+        <width>3.5</width>
       </LineStyle>
       <BalloonStyle>
       </BalloonStyle>
@@ -531,7 +531,7 @@ module.exports = {
                                     break;                                    
                             }
                             
-                            // Write Path placemark, insert styleUrl, path data & node data        
+                            // Write Path placemark, insert styleUrl, path data       
                             kmlpaths.push(`
       <Placemark>
         <name>${path_type || 'Other'} Link</name>
@@ -539,20 +539,10 @@ module.exports = {
           ${node.node}<br/>- to- <br/>${node2.node}
         ]]></description>
         <styleUrl>${PATH_STYLE[path_type] || '#sm_path_other'}</styleUrl>
-        <MultiGeometry>
-          <LineString>
-            <altitudeMode>relativeToGround</altitudeMode>
-            <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
-          </LineString>
-          <Point>
-            <altitudeMode>relativeToGround</altitudeMode>
-            <coordinates>${node.lon},${node.lat},10</coordinates>
-          </Point>
-          <Point>
-            <altitudeMode>relativeToGround</altitudeMode>
-            <coordinates>${node2.lon},${node2.lat},10</coordinates>
-          </Point>          
-        </MultiGeometry>
+        <LineString>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
+        </LineString>
       </Placemark>`);
                             
                         }

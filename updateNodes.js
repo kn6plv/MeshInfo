@@ -4,7 +4,7 @@ const AbortController = require('abort-controller').AbortController;
 const Turf = require('@turf/turf');
 const Log = require("debug")("update");
 
-const DO_FETCH = false;
+const DO_FETCH = true;
 
 const FETCH_TIMEOUT = 20000;
 const MAX_RUNNING = 128;

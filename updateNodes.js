@@ -4,7 +4,7 @@ const AbortController = require('abort-controller').AbortController;
 const Turf = require('@turf/turf');
 const Log = require("debug")("update");
 
-const DO_FETCH = true;
+const DO_FETCH = false;
 
 const FETCH_TIMEOUT = 20000;
 const MAX_RUNNING = 128;
@@ -157,6 +157,17 @@ module.exports = {
                     });
                 }
             }
+        });
+
+        // Mutate various link types to be more specific (specifically identify backbone links)
+        Object.values(populated).forEach(node => {
+            const host1 = node.node.toLowerCase();
+            Object.values(node.link_info || {}).forEach(link => {
+                const host2 = link.hostname.toLowerCase();
+                if (link.linkType === "DTD" && nodegroup[host1] !== nodegroup[host2]) {
+                    link.linkType = 'BB';
+                }
+            });
         });
 
         // Scan the node groups, and adjust the lat/lon measurements so the nodes are close but don't overlap

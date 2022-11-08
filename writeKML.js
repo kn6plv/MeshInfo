@@ -509,22 +509,10 @@ module.exports = {
                             // detect link type and set styleUrl
                             switch (link.linkType) {
                                 case "DTD":
-                                    // DTD links in the game group are local connections - ignore them.
-                                    // DTD links in different groups are backbone links
-                                    if (update.groups[host1] === update.groups[host2]) {
-                                        // path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
-                                        path_type = 'DTD';
-                                        break;
-                                    }
-                                    // Backbone link - fall through ...
-                                    path_type = 'BB';
-                                    break;
+                                case "BB":
                                 case "RF":
-                                    // const path_styleUrl = link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other';
-                                    path_type = 'RF';
-                                    break;
                                 case "TUN":
-                                    path_type = 'TUN';
+                                    path_type = link.linkType;
                                     break;
                                 default:
                                     path_type = 'Other';

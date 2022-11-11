@@ -50,7 +50,7 @@ const kml_styles = `
     <Style id="sn_nodes_2ghz">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_purple.png/href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_purple.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>

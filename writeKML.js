@@ -50,7 +50,7 @@ const kml_styles = `
     <Style id="sn_nodes_2ghz">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/purpleRadioCircle-icon.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_purple.png/href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -66,7 +66,7 @@ const kml_styles = `
     <Style id="sh_nodes_2ghz">
       <IconStyle>
         <scale>1.5</scale>
-        <Icon><href>https://sfmap.xojs.org/purpleRadioCircle-icon.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_purple.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -87,7 +87,7 @@ const kml_styles = `
     <Style id="sn_nodes_3ghz">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/blueRadioCircle-icon.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_blue.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -103,7 +103,7 @@ const kml_styles = `
     <Style id="sh_nodes_3ghz">
       <IconStyle>
         <scale>1.5</scale>
-        <Icon><href>https://sfmap.xojs.org/blueRadioCircle-icon.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_blue.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -124,7 +124,7 @@ const kml_styles = `
     <Style id="sn_nodes_5ghz">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/goldRadioCircle-icon.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_gold.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -140,7 +140,7 @@ const kml_styles = `
     <Style id="sh_nodes_5ghz">
       <IconStyle>
         <scale>1.5</scale>
-        <Icon><href>https://sfmap.xojs.org/goldRadioCircle-icon.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_gold.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -161,7 +161,7 @@ const kml_styles = `
     <Style id="sn_nodes_NoRF">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_gray.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -177,7 +177,7 @@ const kml_styles = `
     <Style id="sh_nodes_NoRF">
       <IconStyle>
         <scale>1.5</scale>
-        <Icon><href>https://sfmap.xojs.org/grayRadioCircle-icon.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_gray.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>

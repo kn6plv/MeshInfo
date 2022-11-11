@@ -182,14 +182,14 @@ module.exports = {
                 let rot = 0;
                 for (let i = 0; i < nodes.length; i++) {
                     const node = nodes[i];
+                    node.mlat = node.lat;
+                    node.mlon = node.lon;
                     if (node !== baseNode) {
                         const nloc = latLonBearingDistance(baseNode.lat, baseNode.lon, rot, 20);
                         rot += angle;
                         if (node.lat != nloc.lat || node.lon != nloc.lon) {
-                            node.olat = node.lat;
-                            node.olon = node.lon;
-                            node.lat = nloc.lat;
-                            node.lon = nloc.lon;
+                            node.mlat = nloc.lat;
+                            node.mlon = nloc.lon;
                         }
                     }
                 }

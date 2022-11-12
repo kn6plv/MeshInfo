@@ -129,6 +129,8 @@ module.exports = {
         const nodegroup = {};
         Object.values(populated).forEach(node => {
             const name = node.node.toLowerCase();
+            node.mlat = node.lat;
+            node.mlon = node.lon;
             if (nodegroup[name]) {
                 nodegroup[name].nodes.push(node);
             }
@@ -182,8 +184,6 @@ module.exports = {
                 let rot = 0;
                 for (let i = 0; i < nodes.length; i++) {
                     const node = nodes[i];
-                    node.mlat = node.lat;
-                    node.mlon = node.lon;
                     if (node !== baseNode) {
                         const nloc = latLonBearingDistance(baseNode.lat, baseNode.lon, rot, 20);
                         rot += angle;

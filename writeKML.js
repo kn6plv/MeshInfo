@@ -50,7 +50,7 @@ const kml_styles = `
     <Style id="sn_nodes_2ghz">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_purple.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_128px_purple.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -66,7 +66,7 @@ const kml_styles = `
     <Style id="sh_nodes_2ghz">
       <IconStyle>
         <scale>1.5</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_purple.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_128px_purple_hl.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -87,7 +87,7 @@ const kml_styles = `
     <Style id="sn_nodes_3ghz">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_blue.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_128px_blue.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -103,7 +103,7 @@ const kml_styles = `
     <Style id="sh_nodes_3ghz">
       <IconStyle>
         <scale>1.5</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_blue.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_128px_blue_hl.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -124,7 +124,7 @@ const kml_styles = `
     <Style id="sn_nodes_5ghz">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_gold.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_128px_gold.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -140,7 +140,7 @@ const kml_styles = `
     <Style id="sh_nodes_5ghz">
       <IconStyle>
         <scale>1.5</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_gold.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_128px_gold_hl.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -161,7 +161,7 @@ const kml_styles = `
     <Style id="sn_nodes_NoRF">
       <IconStyle>
         <scale>1.1</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_gray.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_128px_gray.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -177,7 +177,7 @@ const kml_styles = `
     <Style id="sh_nodes_NoRF">
       <IconStyle>
         <scale>1.5</scale>
-        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_64px_gray.png</href></Icon>
+        <Icon><href>https://sfmap.xojs.org/icons/mesh_icon_128px_gray_hl.png</href></Icon>
         <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
       </IconStyle>
       <LabelStyle>
@@ -316,7 +316,7 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>dd0055ff</color>
+        <color>dd002aff</color>
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
@@ -332,7 +332,7 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>ff0055ff</color>
+        <color>ff002aff</color>
         <width>3.5</width>
       </LineStyle>
       <BalloonStyle>
@@ -375,6 +375,117 @@ const kml_styles = `
       <BalloonStyle>
       </BalloonStyle>
     </Style>   
+
+    <StyleMap id="sm_path_2ghz">
+      <Pair><key>normal</key><styleUrl>#sn_path_2ghz</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_path_2ghz</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_path_2ghz">
+      <IconStyle>
+        <scale>0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <LineStyle>
+        <color>dd900481</color>
+        <width>2</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_path_2ghz">
+      <IconStyle>
+        <scale>3</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <LineStyle>
+        <color>ff900481</color>
+        <width>3.5</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+
+    <StyleMap id="sm_path_3ghz">
+      <Pair><key>normal</key><styleUrl>#sn_path_3ghz</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_path_3ghz</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_path_3ghz">
+      <IconStyle>
+        <scale>0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <LineStyle>
+        <color>ddf80000</color>
+        <width>2</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_path_3ghz">
+      <IconStyle>
+        <scale>3</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <LineStyle>
+        <color>fff80000</color>
+        <width>3.5</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>   
+
+    <StyleMap id="sm_path_5ghz">
+      <Pair><key>normal</key><styleUrl>#sn_path_5ghz</styleUrl></Pair>
+      <Pair><key>highlight</key><styleUrl>#sh_path_5ghz</styleUrl></Pair>
+    </StyleMap>
+    <Style id="sn_path_5ghz">
+      <IconStyle>
+        <scale>0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <LineStyle>
+        <color>dd4297ff</color>
+        <width>2</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>
+    <Style id="sh_path_5ghz">
+      <IconStyle>
+        <scale>3</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
+        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <LineStyle>
+        <color>ff4297ff</color>
+        <width>3.5</width>
+      </LineStyle>
+      <BalloonStyle>
+      </BalloonStyle>
+    </Style>       
 `;
 
 module.exports = {
@@ -382,7 +493,8 @@ module.exports = {
     write(update, filename) {
 
         const kml = [];
-        const kmlpaths = [];
+        const kmlpaths_type = [];
+        const kmlpaths_rf = [];
         const links = {};
 
         const BAND_STYLE = {
@@ -397,6 +509,9 @@ module.exports = {
             "DTD": "#sm_path_dtd",
             "TUN": "#sm_path_tun",
             "BB": "#sm_path_bb",
+            "2": "#sm_path_2ghz",
+            "3": "#sm_path_3ghz",
+            "5": "#sm_path_5ghz",
             "Other": "#sm_path_other"
         };
 
@@ -502,37 +617,42 @@ module.exports = {
                         // process link for Paths Placemarks
                         const k1 = `${host1}/${host2}`;
                         const k2 = `${host2}/${host1}`;
-                        let path_type = 'Other';
                         // Process links if we've not seen them already
                         if (!(links[k1] || links[k2])) {
-                            
-                            // detect link type and set styleUrl
-                            switch (link.linkType) {
-                                case "DTD":
-                                case "BB":
-                                case "RF":
-                                case "TUN":
-                                    path_type = link.linkType;
-                                    break;
-                                default:
-                                    path_type = 'Other';
-                                    break;                                    
-                            }
-                            
-                            // Write Path placemark, insert styleUrl, path data       
-                            kmlpaths.push(`
+                                                      
+                            // PATH BY TYPE - Write Path placemark, insert styleUrl, path data       
+                            kmlpaths_type.push(`
       <Placemark>
-        <name>${path_type || 'Other'} Link</name>
+        <name>${link.linkType || 'Other'} Link</name>
+        <visibility>1</visibility>
         <description><![CDATA[
           ${node.node}<br/>- to- <br/>${node2.node}
         ]]></description>
-        <styleUrl>${PATH_STYLE[path_type] || '#sm_path_other'}</styleUrl>
+        <styleUrl>${link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other'}</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <altitudeMode>clampToGround</altitudeMode>
+          <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
+        </LineString>
+      </Placemark>`);
+
+                            // PATH BY RF BAND - Write Path placemark, insert styleUrl, path data
+                            if (link.linkType == 'RF') {
+                                kmlpaths_rf.push(`
+      <Placemark>
+        <name>${node.meshrf.freq && node.meshrf.freq[0] + 'GHz' || 'Unk Freq'} Link</name>
+        <visibility>0</visibility>
+        <description><![CDATA[
+          ${node.node}<br/>- to- <br/>${node2.node}
+        ]]></description>
+        <styleUrl>${PATH_STYLE[node.meshrf.freq[0]] || '#sm_path_other'}</styleUrl>
         <LineString>
           <altitudeMode>relativeToGround</altitudeMode>
           <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
         </LineString>
-      </Placemark>`);
-                            
+      </Placemark>                             
+                               `);
+                            }
                         }
                         // end of IF that checks whether we've seen a link before
                         
@@ -554,24 +674,59 @@ module.exports = {
         });
         // end of loop through nodes list
 
+        // Get timestamp & set up date to display in KML
+        let ts = Date.now();
+        let date_ob = new Date(ts);
+        let generated_daytime = date_ob.toISOString();
+        // TODO: convert UTC day/time to local day/time
+
         // Generate overall KML File (inject styles, node placemarks, paths placemarks, etc.)
+
         fs.writeFileSync(filename, `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document>
-    <name>Mesh Map</name>
-    <description><![CDATA[https://sfmap.xojs.org/]]></description>
+    <name>BAM Netowrk KML</name>
+    <open>1</open>
+    <Snippet maxLines="1">${generated_daytime}</Snippet>
+    <description><![CDATA[Generated: ${generated_daytime}<br/>
+      This KML output is a work in progress by KJ6WEG (Nov 2022).
+  ]]></description>
     ${kml_styles}
+
     <Folder>
       <name>Nodes</name>
       ${kml.join("\n")}
     </Folder>
+
     <Folder>
-      <name>Paths</name>
-      ${kmlpaths.join("\n")}
+      <name>Paths...</name>
+      <visibility>1</visibility>
+      <open>1</open>
+      <Style>
+        <ListStyle>
+          <listItemType>radioFolder</listItemType>
+        </ListStyle>
+      </Style>
+
+      <Folder>
+        <name>Paths by Type</name>
+        <visibility>1</visibility>
+        <open>0</open>
+        ${kmlpaths_type.join("\n")}
+      </Folder>
+
+      <Folder>
+        <name>Paths by RF Band</name>
+        <visibility>0</visibility>
+        <open>0</open>
+        ${kmlpaths_rf.join("\n")}
+      </Folder>
+
     </Folder>
+
   </Document>
 </kml>`);
-                
+
     }
 
 }

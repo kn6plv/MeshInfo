@@ -492,11 +492,21 @@ module.exports = {
 
     write(update, filename) {
 
-        const kml = [];
-        const kmlpaths_type = [];
-        const kmlpaths_rf = [];
+        const kml_nodes = [];
+        const kmlpaths_type_rf = [];
+        const kmlpaths_type_dtd = [];
+        const kmlpaths_type_tun = [];
+        const kmlpaths_type_bb = [];
+        const kmlpaths_type_other = [];
+        const kmlpaths_rf_5 = [];
+        const kmlpaths_rf_3 = [];
+        const kmlpaths_rf_2 = [];
+        const kmlpaths_rf_other = [];
         const links = {};
 
+        const point_alt = 12;
+        const line_alt = 12;
+        
         const BAND_STYLE = {
             "N": "#sm_nodes_NoRF",
             "5": "#sm_nodes_5ghz",
@@ -515,6 +525,17 @@ module.exports = {
             "Other": "#sm_path_other"
         };
 
+        const DRAW_ORDER = {
+            "L1": "1",
+            "L2": "2",
+            "L3": "3",
+            "L4": "4",
+            "N": "10",
+            "2": "20",
+            "3": "30",
+            "5": "50"
+        };
+
         // Loop through nodes list, generate KML Placemark for each
         update.nodes.forEach(node => {
 
@@ -524,9 +545,10 @@ module.exports = {
             
             // check that node has location data, if so generate Placemark
             if (node.lat && node.lon) {
-                kml.push(`
+                kml_nodes.push(`
       <Placemark>
         <name>${node.node}</name>
+        <Snippet maxLines="0"></Snippet>
         <styleUrl>${node_styleUrl}</styleUrl>
         <ExtendedData>
           <Data name="hardware">
@@ -556,7 +578,6 @@ module.exports = {
           <Data name="freq">
             <value>${node.meshrf && node.meshrf.freq || 'None'}</value>
           </Data>
-          <!-- DEBUG: freq1 = ${freq1} , band_style = ${BAND_STYLE[freq1]} -->
           <Data name="chanbw">
             <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
           </Data>
@@ -579,8 +600,10 @@ module.exports = {
             <value>TODO</value>
           </Data>
           <Data name="services">
-            <value>TODO</value>
-          </Data>
+            <value><![CDATA[
+              ${(node.services_local || []).length} Services: ${(node.services_local || []).map((s, i) => '<br/>' + i + '. ' + '<a href="' + s.link + '">' + s.name + '</a> (' + s.protocol + ')').join('')}
+            ]]></value>
+          </Data>          
           <Data name="tunnel_installed">
             <value>${node.tunnels.tunnel_installed || true}</value>
           </Data>
@@ -595,7 +618,8 @@ module.exports = {
           <Point>
             <extrude>1</extrude>
             <altitudeMode>relativeToGround</altitudeMode>
-            <coordinates>${node.lon},${node.lat},10</coordinates>
+            <gx:drawOrder>${DRAW_ORDER[freq1]}</gx:drawOrder>
+            <coordinates>${node.lon},${node.lat},${point_alt}</coordinates>
           </Point>`);
                 
 
@@ -609,9 +633,10 @@ module.exports = {
                     // push linestring into Node Placemark multigoemetry
                     if (node2 && node2.lat && node2.lon) {
                         const host2 = node2.node.toLowerCase();
-                        kml.push(`          <LineString>
+                        kml_nodes.push(`          <LineString>
             <altitudeMode>relativeToGround</altitudeMode>
-            <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
+            <gx:drawOrder>${DRAW_ORDER['L1']}</gx:drawOrder>
+            <coordinates>${node.lon},${node.lat},${line_alt} ${node2.lon},${node2.lat},${line_alt}</coordinates>
           </LineString>`);
                     
                         // process link for Paths Placemarks
@@ -621,40 +646,81 @@ module.exports = {
                         if (!(links[k1] || links[k2])) {
                                                       
                             // PATH BY TYPE - Write Path placemark, insert styleUrl, path data       
-                            kmlpaths_type.push(`
-      <Placemark>
-        <name>${link.linkType || 'Other'} Link</name>
-        <visibility>1</visibility>
-        <description><![CDATA[
-          ${node.node}<br/>- to- <br/>${node2.node}
-        ]]></description>
-        <styleUrl>${link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other'}</styleUrl>
-        <LineString>
-          <tessellate>1</tessellate>
-          <altitudeMode>clampToGround</altitudeMode>
-          <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
-        </LineString>
-      </Placemark>`);
+                            let kmlpath_type = (`
+          <Placemark>
+            <name>${link.linkType || 'Other'} Link${link.linkType=='RF' && node.meshrf.freq && ' (' + node.meshrf.freq[0] + ' GHz)' || ''}</name>
+            <visibility>1</visibility>
+            <Snippet maxLines="2"><![CDATA[
+              ${node.node}<br/>${node2.node}
+            ]]></Snippet>
+            <description><![CDATA[
+              ${node.node}<br/> --- to --- <br/>${node2.node}
+            ]]></description>
+            <styleUrl>${link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other'}</styleUrl>
+            <LineString>
+              <altitudeMode>relativeToGround</altitudeMode>
+              <gx:drawOrder>${DRAW_ORDER['L2']}</gx:drawOrder>
+              <coordinates>${node.lon},${node.lat},${line_alt} ${node2.lon},${node2.lat},${line_alt}</coordinates>
+            </LineString>
+          </Placemark>`);
+                            
+                            // write kml path to the variable for it's folder by type
+                            switch(link.linkType) {
+                              case 'RF':
+                                kmlpaths_type_rf.push(kmlpath_type);
+                                break;
+                              case 'DTD':
+                                kmlpaths_type_dtd.push(kmlpath_type);
+                                break;
+                              case 'TUN':
+                                kmlpaths_type_tun.push(kmlpath_type);
+                                break;
+                              case 'BB':
+                                kmlpaths_type_bb.push(kmlpath_type);
+                                break;
+                              default:
+                                kmlpaths_type_other.push(kmlpath_type);
+                            }
 
                             // PATH BY RF BAND - Write Path placemark, insert styleUrl, path data
                             if (link.linkType == 'RF') {
-                                kmlpaths_rf.push(`
-      <Placemark>
-        <name>${node.meshrf.freq && node.meshrf.freq[0] + 'GHz' || 'Unk Freq'} Link</name>
-        <visibility>0</visibility>
-        <description><![CDATA[
-          ${node.node}<br/>- to- <br/>${node2.node}
-        ]]></description>
-        <styleUrl>${PATH_STYLE[node.meshrf.freq[0]] || '#sm_path_other'}</styleUrl>
-        <LineString>
-          <altitudeMode>relativeToGround</altitudeMode>
-          <coordinates>${node.lon},${node.lat},10 ${node2.lon},${node2.lat},10</coordinates>
-        </LineString>
-      </Placemark>                             
-                               `);
+                                let kmlpath_rf = (`
+          <Placemark>
+            <name>${node.meshrf.freq && node.meshrf.freq[0] + ' GHz' || 'Unk Freq'} Link</name>
+            <visibility>0</visibility>
+            <Snippet maxLines="2"><![CDATA[
+              ${node.node}<br/>${node2.node}
+            ]]></Snippet>
+            <description><![CDATA[
+              ${node.node}<br/> --- to --- <br/>${node2.node}
+            ]]></description>
+            <styleUrl>${PATH_STYLE[node.meshrf.freq[0]] || '#sm_path_other'}</styleUrl>
+            <LineString>
+              <altitudeMode>relativeToGround</altitudeMode>
+              <gx:drawOrder>${DRAW_ORDER['L3']}</gx:drawOrder>
+              <coordinates>${node.lon},${node.lat},${line_alt} ${node2.lon},${node2.lat},${line_alt}</coordinates>
+            </LineString>
+          </Placemark>`);
+                              // write kml path to the variable for it's folder by band
+                              switch(node.meshrf.freq && node.meshrf.freq[0] || 'N') {
+                                case '5':
+                                  kmlpaths_rf_5.push(kmlpath_rf);
+                                  break;
+                                case '3':
+                                  kmlpaths_rf_3.push(kmlpath_rf);
+                                  break;
+                                case '2':
+                                  kmlpaths_rf_2.push(kmlpath_rf);
+                                  break;
+                                case 'N':
+                                default:
+                                  kmlpaths_rf_other.push(kmlpath_rf);
+                              }                                                              
+
                             }
+
                         }
-                        // end of IF that checks whether we've seen a link before
+                        // end of IF that checks whether we've seen a link before, and if not, generates paths
                         
                         links[k1] = true;
                         links[k2] = true;
@@ -665,7 +731,7 @@ module.exports = {
                 // end of push that writes most of Node Placemark
 
                 // push end of main Node Placemark
-                kml.push(`        </MultiGeometry>
+                kml_nodes.push(`        </MultiGeometry>
       </Placemark>`);
 
             }
@@ -684,21 +750,24 @@ module.exports = {
 
         fs.writeFileSync(filename, `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
-  <Document>
+  <Document id="bam_network_kml">
     <name>BAM Netowrk KML</name>
     <open>1</open>
     <Snippet maxLines="1">${generated_daytime}</Snippet>
-    <description><![CDATA[Generated: ${generated_daytime}<br/>
-      This KML output is a work in progress by KJ6WEG (Nov 2022).
-  ]]></description>
+    <description><![CDATA[Generated:<br/> 
+      ${generated_daytime}<br/>
+      <br/>
+      This KML output is a work in progress by Chris KJ6WEG, feedback welcome: kj6weg@arrl.net<br/>
+      (Nov 2022)
+    ]]></description>
     ${kml_styles}
 
-    <Folder>
+    <Folder id="folder_nodes">
       <name>Nodes</name>
-      ${kml.join("\n")}
+      ${kml_nodes.join("\n")}
     </Folder>
 
-    <Folder>
+    <Folder id="folder_paths">
       <name>Paths...</name>
       <visibility>1</visibility>
       <open>1</open>
@@ -708,18 +777,81 @@ module.exports = {
         </ListStyle>
       </Style>
 
-      <Folder>
+      <Folder id="folder_paths_by_type">
         <name>Paths by Type</name>
         <visibility>1</visibility>
         <open>0</open>
-        ${kmlpaths_type.join("\n")}
+
+        <Folder id="folder_paths_type_rf">
+          <name>Paths Type RF</name>
+          <visibility>1</visibility>
+          <open>0</open>
+          ${kmlpaths_type_rf.join("\n")}
+        </Folder>
+
+        <Folder id="folder_paths_type_dtd">
+          <name>Paths Type DTD</name>
+          <visibility>1</visibility>
+          <open>0</open>
+          ${kmlpaths_type_dtd.join("\n")}
+        </Folder>   
+
+        <Folder id="folder_paths_type_bb">
+          <name>Paths Type BB</name>
+          <visibility>1</visibility>
+          <open>0</open>
+          ${kmlpaths_type_bb.join("\n")}
+        </Folder>
+
+        <Folder id="folder_paths_type_tun">
+          <name>Paths Type TUN</name>
+          <visibility>1</visibility>
+          <open>0</open>
+          ${kmlpaths_type_tun.join("\n")}
+        </Folder>
+
+        <Folder id="folder_paths_type_other">
+          <name>Paths Type Other</name>
+          <visibility>1</visibility>
+          <open>0</open>
+          ${kmlpaths_type_other.join("\n")}
+        </Folder>       
+
       </Folder>
 
-      <Folder>
+      <Folder id="folder_paths_by_rf_band">
         <name>Paths by RF Band</name>
         <visibility>0</visibility>
         <open>0</open>
-        ${kmlpaths_rf.join("\n")}
+
+        <Folder id="folder_paths_rf_5">
+          <name>Paths 5 GHz Band</name>
+          <visibility>0</visibility>
+          <open>0</open>
+          ${kmlpaths_rf_5.join("\n")}
+        </Folder>        
+
+        <Folder id="folder_paths_rf_3">
+          <name>Paths 3 GHz Band</name>
+          <visibility>0</visibility>
+          <open>0</open>
+          ${kmlpaths_rf_3.join("\n")}
+        </Folder>
+
+        <Folder id="folder_paths_rf_2">
+          <name>Paths 2 GHz Band</name>
+          <visibility>0</visibility>
+          <open>0</open>
+          ${kmlpaths_rf_2.join("\n")}
+        </Folder>
+
+        <Folder id="folder_paths_rf_other">
+          <name>Paths Other RF</name>
+          <visibility>0</visibility>
+          <open>0</open>
+          ${kmlpaths_rf_other.join("\n")}
+        </Folder>
+
       </Folder>
 
     </Folder>

@@ -3,6 +3,157 @@ const fs = require("fs");
 const Log = require("debug")("kml");
 
 // KML shared Styles section
+
+const balloon_template_node = `
+          <html>
+            <head>
+              <style>
+                table {
+                  border: 4px solid gray;
+                  border-collapse: collapse;
+                }
+                td, th {
+                  border: 1px solid gray;
+                  padding: 4px;
+                }
+              </style>
+            </head>
+            <body>
+              <h2>$[name]</h2>
+              <table style="width:100%">
+                <tbody>
+                <tr>
+                  <td>Hardware</td>
+                  <td>
+                    HW: $[hardware]<br/>
+                    $[board_id/displayName]: $[board_id]<br/>
+                    $[model/displayName]: $[model]
+                  </td>
+                </tr>
+                <tr>
+                  <td>Firmware</td>
+                  <td>
+                    $[firmware_mfg]<br/>
+                    $[firmware_version]                  
+                  </td>
+                </tr>
+                <tr>
+                  <td>RF</td>
+                  <td>
+                    Ch: $[channel] ($[freq] MHz)<br/>
+                    BW: $[chanbw] MHz<br/>
+                    SSID: $[ssid]
+                </tr>
+                <tr>
+                  <td>WiFi MAC Addr.</td>
+                  <td>$[wifi_mac_address]</td>
+                </tr>
+                <tr>
+                  <td>LAN IP Addr.</td>
+                  <td>$[lan_ip]</td>
+                </tr>
+                <tr>
+                  <td>Location</td>
+                  <td>
+                    $[lat],$[lon]<br/>
+                    Grid Sq.: $[grid_square]
+                </tr>
+                <tr>
+                  <td>$[services/displayName]</td>
+                  <td>$[services]</td>
+                </tr>
+                <tr>
+                  <td>Tunnel</td>
+                  <td>Installed: $[tunnel_installed]<br/>
+                  Count: $[tunnel_count]</td>
+                </tr>
+                <tr>
+                  <td>$[lqm/displayName]</td>
+                  <td>$[lqm]</td>
+                </tr>
+                <tbody>
+              </table>
+            </body>
+          </html>
+        `
+
+const balloon_template_path_rf = `
+        <html>
+          <head>
+            <style>
+              table {
+                border: 4px solid gray;
+                border-collapse: collapse;
+              }
+              td, th {
+                border: 1px solid gray;
+                padding: 4px;
+              }
+            </style>
+          </head>
+          <body>
+            <h2>$[name]</h2>
+            <table style="width:100%">
+              <tbody>
+              <tr>
+                <td>$[node1/displayName]</td>
+                <td>$[node1]</td>
+              </tr>
+              <tr>
+                <td>$[node2/displayName]</td>
+                <td>$[node2]</td>
+              </tr>
+              <tr>
+                <td>$[link_type/displayName]</td>
+                <td>$[link_type]</td>
+              </tr>
+              <tr>
+                <td>RF</td>
+                <td>
+                  Ch: $[channel] ($[freq] MHz)<br/>
+                  BW: $[chanbw] MHz<br/>
+              </tr>
+              <tbody>
+            </table>
+          </body>
+        </html>
+      `
+const balloon_template_path_nonrf = `
+        <html>
+          <head>
+            <style>
+              table {
+                border: 4px solid gray;
+                border-collapse: collapse;
+              }
+              td, th {
+                border: 1px solid gray;
+                padding: 4px;
+              }
+            </style>
+          </head>
+          <body>
+            <h2>$[name]</h2>
+            <table style="width:100%">
+              <tbody>
+              <tr>
+                <td>$[node1/displayName]</td>
+                <td>$[node1]</td>
+              </tr>
+              <tr>
+                <td>$[node2/displayName]</td>
+                <td>$[node2]</td>
+              </tr>
+              <tr>
+                <td>$[link_type/displayName]</td>
+                <td>$[link_type]</td>
+              </tr>
+              <tbody>
+            </table>
+          </body>
+        </html>
+      `
+
 const kml_styles = `
     <StyleMap id="sm_nodes">
       <Pair><key>normal</key><styleUrl>#sn_nodes</styleUrl></Pair>
@@ -23,6 +174,7 @@ const kml_styles = `
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_nodes">
@@ -37,9 +189,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>4</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
     
@@ -61,6 +214,7 @@ const kml_styles = `
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_nodes_2ghz">
@@ -74,9 +228,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>4</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
 
@@ -98,6 +253,7 @@ const kml_styles = `
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_nodes_3ghz">
@@ -111,9 +267,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>4</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
     
@@ -135,6 +292,7 @@ const kml_styles = `
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_nodes_5ghz">
@@ -148,9 +306,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>4</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
 
@@ -172,6 +331,7 @@ const kml_styles = `
         <width>0</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_nodes_NoRF">
@@ -185,9 +345,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>bbffffff</color>
-        <width>4</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_node}]]></text>
       </BalloonStyle>
     </Style>
     
@@ -209,6 +370,7 @@ const kml_styles = `
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_rf}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_rf">
@@ -222,9 +384,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ff00ff00</color>
-        <width>3.5</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_rf}]]></text>
       </BalloonStyle>
     </Style>
     
@@ -246,6 +409,7 @@ const kml_styles = `
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_nonrf}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_dtd">
@@ -259,9 +423,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ff00ffff</color>
-        <width>3.5</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_nonrf}]]></text>
       </BalloonStyle>
     </Style>
     
@@ -283,6 +448,7 @@ const kml_styles = `
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_nonrf}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_tun">
@@ -296,9 +462,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ff888888</color>
-        <width>3.5</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_nonrf}]]></text>
       </BalloonStyle>
     </Style>
     
@@ -320,6 +487,7 @@ const kml_styles = `
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
+      <text><![CDATA[${balloon_template_path_nonrf}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_bb">
@@ -333,9 +501,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ff002aff</color>
-        <width>3.5</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+      <text><![CDATA[${balloon_template_path_nonrf}]]></text>
       </BalloonStyle>
     </Style>
     
@@ -357,6 +526,7 @@ const kml_styles = `
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
+      <text><![CDATA[${balloon_template_path_nonrf}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_other">
@@ -370,9 +540,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ffffffff</color>
-        <width>3.5</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+      <text><![CDATA[${balloon_template_path_nonrf}]]></text>
       </BalloonStyle>
     </Style>   
 
@@ -394,6 +565,7 @@ const kml_styles = `
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
+      <text><![CDATA[${balloon_template_path_rf}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_2ghz">
@@ -407,9 +579,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ff900481</color>
-        <width>3.5</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_rf}]]></text>
       </BalloonStyle>
     </Style>
 
@@ -431,6 +604,7 @@ const kml_styles = `
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_rf}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_3ghz">
@@ -444,9 +618,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>fff80000</color>
-        <width>3.5</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_rf}]]></text>
       </BalloonStyle>
     </Style>   
 
@@ -468,6 +643,7 @@ const kml_styles = `
         <width>2</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_rf}]]></text>
       </BalloonStyle>
     </Style>
     <Style id="sh_path_5ghz">
@@ -481,9 +657,10 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>ff4297ff</color>
-        <width>3.5</width>
+        <width>5</width>
       </LineStyle>
       <BalloonStyle>
+        <text><![CDATA[${balloon_template_path_rf}]]></text>
       </BalloonStyle>
     </Style>       
 `;
@@ -552,65 +729,85 @@ module.exports = {
         <styleUrl>${node_styleUrl}</styleUrl>
         <ExtendedData>
           <Data name="hardware">
+            <displayName>Hardware</displayName>
             <value>TODO</value>
           </Data>
           <Data name="board_id">
+            <displayName>Board ID</displayName>
             <value>${node.node_details.board_id}</value>
           </Data>
           <Data name="model">
+            <displayName>Model</displayName>
             <value>${node.node_details.model}</value>
           </Data>
           <Data name="firmware_mfg">
+            <displayName>Firmware Mfg.</displayName>
             <value>${node.node_details.firmware_mfg}</value>
           </Data>          
           <Data name="firmware_version">
+            <displayName>Firmware Version</displayName>
             <value>${node.node_details.firmware_version}</value>
           </Data>
           <Data name="api_version">
+            <displayName>API Version</displayName>
             <value>${node.api_version}</value>
           </Data>
           <Data name="ssid">
+            <displayName>SSID</displayName>
             <value>${node.meshrf && node.meshrf.ssid || 'None'}</value>
           </Data>
           <Data name="channel">
+            <displayName>Channel</displayName>
             <value>${node.meshrf && node.meshrf.channel || 'None'}</value>
           </Data>
           <Data name="freq">
+            <displayName>Frequency</displayName>
             <value>${node.meshrf && node.meshrf.freq || 'None'}</value>
           </Data>
           <Data name="chanbw">
+            <displayName>Bandwidth</displayName>
             <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
           </Data>
           <Data name="wifi_mac_address">
+            <displayName>WiFi MAC Address</displayName>
             <value>${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'}</value>
           </Data>
           <Data name="lan_ip">
+            <displayName>LAN IP Address</displayName>
             <value>${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'}</value>
           </Data>          
           <Data name="lat">
+            <displayName>Latitude</displayName>
             <value>${node.lat || '"Not Available"'}</value>
           </Data>
           <Data name="lon">
+            <displayName>Longitude</displayName>
             <value>${node.lon || '"Not Available"'}</value>
           </Data>
           <Data name="grid_square">
+            <displayName>Grid Square</displayName>
             <value>${node.grid_square || '"Not Available"'}</value>
           </Data>
            <Data name="location_fix">
+            <displayName>Location Fix</displayName>
             <value>TODO</value>
           </Data>
           <Data name="services">
+            <displayName>Services</displayName>
             <value><![CDATA[
               ${(node.services_local || []).length} Services: ${(node.services_local || []).map((s, i) => '<br/>' + i + '. ' + '<a href="' + s.link + '">' + s.name + '</a> (' + s.protocol + ')').join('')}
             ]]></value>
           </Data>          
           <Data name="tunnel_installed">
+            <displayName>Tunnel Installed</displayName>
             <value>${node.tunnels.tunnel_installed || true}</value>
           </Data>
           <Data name="tunnel_count">
+            <displayName>Tunnel Count</displayName>
             <value>${node.tunnels.active_tunnel_count}</value>
           </Data>
           <Data name="lqm">
+            <displayName>LQM Enabled</displayName>
             <value>${node.lqm && node.lqm.enabled ? 'true' : 'false'}</value>
           </Data>
         </ExtendedData>
@@ -657,6 +854,32 @@ module.exports = {
               ${node.node}<br/> --- to --- <br/>${node2.node}
             ]]></description>
             <styleUrl>${link.linkType && PATH_STYLE[link.linkType] || '#sm_path_other'}</styleUrl>
+            <ExtendedData>
+              <Data name="node1">
+                <displayName>Node 1</displayName>
+                <value>${node.node || 'error'}</value>
+              </Data>
+              <Data name="node2">
+                <displayName>Node 2</displayName>
+                <value>${node2.node || 'error'}</value>
+              </Data>
+              <Data name="link_type">
+                <displayName>Link Type</displayName>
+                <value>${link.linkType || 'Other'}</value>
+              </Data>
+              <Data name="channel">
+                <displayName>Channel</displayName>
+                <value>${node.meshrf && node.meshrf.channel || 'None'}</value>
+              </Data>
+              <Data name="freq">
+                <displayName>Frequency</displayName>
+                <value>${node.meshrf && node.meshrf.freq || 'None'}</value>
+              </Data>
+              <Data name="chanbw">
+                <displayName>Bandwidth</displayName>
+                <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
+              </Data>
+            </ExtendedData>
             <LineString>
               <altitudeMode>relativeToGround</altitudeMode>
               <gx:drawOrder>${DRAW_ORDER['L2']}</gx:drawOrder>
@@ -695,6 +918,32 @@ module.exports = {
               ${node.node}<br/> --- to --- <br/>${node2.node}
             ]]></description>
             <styleUrl>${PATH_STYLE[node.meshrf.freq[0]] || '#sm_path_other'}</styleUrl>
+            <ExtendedData>
+              <Data name="node1">
+                <displayName>Node 1</displayName>
+                <value>${node.node || 'error'}</value>
+              </Data>
+              <Data name="node2">
+                <displayName>Node 2</displayName>
+                <value>${node2.node || 'error'}</value>
+              </Data>
+              <Data name="link_type">
+                <displayName>Link Type</displayName>
+                <value>${link.linkType || 'Other'}</value>
+              </Data>
+              <Data name="channel">
+                <displayName>Channel</displayName>
+                <value>${node.meshrf && node.meshrf.channel || 'None'}</value>
+              </Data>
+              <Data name="freq">
+                <displayName>Frequency</displayName>
+                <value>${node.meshrf && node.meshrf.freq || 'None'}</value>
+              </Data>
+              <Data name="chanbw">
+                <displayName>Bandwidth</displayName>
+                <value>${node.meshrf && node.meshrf.chanbw || 'None'}</value>
+              </Data>
+            </ExtendedData>            
             <LineString>
               <altitudeMode>relativeToGround</altitudeMode>
               <gx:drawOrder>${DRAW_ORDER['L3']}</gx:drawOrder>

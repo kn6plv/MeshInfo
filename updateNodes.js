@@ -7,7 +7,7 @@ const Log = require("debug")("update");
 const DO_FETCH = true;
 
 const FETCH_TIMEOUT = 20000;
-const MAX_RUNNING = 128;
+const MAX_RUNNING = 8;
 const MAX_ATTEMPTS = 2;
 const AGE_OUT = 7 * 24 * 60 * 60;
 

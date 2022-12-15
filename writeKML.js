@@ -934,6 +934,7 @@ module.exports = {
 
     <Folder id="folder_paths">
       <name>Paths...</name>
+      <visibility>1</visibility>
       <open>1</open>
       <Style>
         <ListStyle>
@@ -944,52 +945,73 @@ module.exports = {
       <Folder id="folder_paths_by_rf_band">
         <name>Paths by RF Band</name>
         <visibility>0</visibility>
+        <open>0</open>
 
         <Folder id="folder_paths_rf_5">
           <name>Paths 5 GHz Band</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_rf_5.join("\n")}
         </Folder>        
 
         <Folder id="folder_paths_rf_3">
           <name>Paths 3 GHz Band</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_rf_3.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_rf_2">
           <name>Paths 2 GHz Band</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_rf_2.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_rf_other">
           <name>Paths Other RF</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_rf_other.join("\n")}
         </Folder>
       </Folder>
 
       <Folder id="folder_paths_by_type">
         <name>Paths by Type</name>
+        <visibility>1</visibility>
+        <open>0</open>
         <Folder id="folder_paths_type_rf">
           <name>Paths Type RF</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_type_rf.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_type_dtd">
           <name>Paths Type DTD</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_type_dtd.join("\n")}
         </Folder>   
 
         <Folder id="folder_paths_type_bb">
           <name>Paths Type BB</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_type_bb.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_type_tun">
           <name>Paths Type TUN</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_type_tun.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_type_other">
           <name>Paths Type Other</name>
+          <visibility>1</visibility>
+          <open>0</open>
           ${kmlpaths_type_other.join("\n")}
         </Folder>       
       </Folder>

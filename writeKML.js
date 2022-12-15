@@ -75,8 +75,7 @@ const balloon_template_node = `
               </table>
             </body>
           </html>
-        `
-
+        `;
 const balloon_template_path_rf = `
         <html>
           <head>
@@ -117,7 +116,7 @@ const balloon_template_path_rf = `
             </table>
           </body>
         </html>
-      `
+      `;
 const balloon_template_path_nonrf = `
         <html>
           <head>
@@ -152,8 +151,7 @@ const balloon_template_path_nonrf = `
             </table>
           </body>
         </html>
-      `
-
+      `;
 const kml_styles = `
     <StyleMap id="sm_nodes">
       <Pair><key>normal</key><styleUrl>#sn_nodes</styleUrl></Pair>
@@ -1000,7 +998,7 @@ module.exports = {
         fs.writeFileSync(filename, `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document id="bam_network_kml">
-    <name>BAM Netowrk KML</name>
+    <name>BAM Network KML</name>
     <open>1</open>
     <Snippet maxLines="1">${generated_daytime}</Snippet>
     <description><![CDATA[Generated:<br/> 
@@ -1018,7 +1016,6 @@ module.exports = {
 
     <Folder id="folder_paths">
       <name>Paths...</name>
-      <visibility>1</visibility>
       <open>1</open>
       <Style>
         <ListStyle>
@@ -1028,79 +1025,59 @@ module.exports = {
 
       <Folder id="folder_paths_by_type">
         <name>Paths by Type</name>
-        <visibility>1</visibility>
-        <open>0</open>
-
         <Folder id="folder_paths_type_rf">
           <name>Paths Type RF</name>
-          <visibility>1</visibility>
-          <open>0</open>
           ${kmlpaths_type_rf.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_type_dtd">
           <name>Paths Type DTD</name>
-          <visibility>1</visibility>
-          <open>0</open>
           ${kmlpaths_type_dtd.join("\n")}
         </Folder>   
 
         <Folder id="folder_paths_type_bb">
           <name>Paths Type BB</name>
-          <visibility>1</visibility>
-          <open>0</open>
           ${kmlpaths_type_bb.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_type_tun">
           <name>Paths Type TUN</name>
-          <visibility>1</visibility>
-          <open>0</open>
           ${kmlpaths_type_tun.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_type_other">
           <name>Paths Type Other</name>
-          <visibility>1</visibility>
-          <open>0</open>
           ${kmlpaths_type_other.join("\n")}
         </Folder>       
-
       </Folder>
 
       <Folder id="folder_paths_by_rf_band">
         <name>Paths by RF Band</name>
         <visibility>0</visibility>
-        <open>0</open>
 
         <Folder id="folder_paths_rf_5">
           <name>Paths 5 GHz Band</name>
           <visibility>0</visibility>
-          <open>0</open>
           ${kmlpaths_rf_5.join("\n")}
         </Folder>        
 
         <Folder id="folder_paths_rf_3">
           <name>Paths 3 GHz Band</name>
           <visibility>0</visibility>
-          <open>0</open>
           ${kmlpaths_rf_3.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_rf_2">
           <name>Paths 2 GHz Band</name>
           <visibility>0</visibility>
-          <open>0</open>
           ${kmlpaths_rf_2.join("\n")}
         </Folder>
 
         <Folder id="folder_paths_rf_other">
           <name>Paths Other RF</name>
           <visibility>0</visibility>
-          <open>0</open>
           ${kmlpaths_rf_other.join("\n")}
         </Folder>
-
       </Folder>
 
     </Folder>

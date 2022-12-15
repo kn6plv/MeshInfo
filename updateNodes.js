@@ -178,7 +178,7 @@ module.exports = {
         pending.push({ name: ROOT, attempts: 0 });
 
         async function crawl() {
-            const next = pending.shift();
+            const next = pending.splice(Math.floor(Math.random() * pending.length), 1)[0];
             if (next) {
                 const node = await readNode(next.name);
                 if (node) {

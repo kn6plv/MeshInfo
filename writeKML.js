@@ -828,11 +828,15 @@ module.exports = {
                     // push linestring into Node Placemark multigoemetry
                     if (node2 && node2.lat && node2.lon) {
                         const host2 = node2.node.toLowerCase();
+      /*
+       * Disable for now as it make the web version flash a lot
+       *
                         kml_nodes.push(`          <LineString>
             <altitudeMode>relativeToGround</altitudeMode>
             <gx:drawOrder>${DRAW_ORDER['L1']}</gx:drawOrder>
             <coordinates>${node.lon},${node.lat},${line_alt} ${node2.lon},${node2.lat},${line_alt}</coordinates>
           </LineString>`);
+       */
                     
                         // process link for Paths Placemarks
                         const k1 = `${host1}/${host2}`;

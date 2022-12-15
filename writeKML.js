@@ -844,7 +844,6 @@ module.exports = {
                             let kmlpath_type = (`
           <Placemark>
             <name>${link.linkType || 'Other'} Link${link.linkType=='RF' && node.meshrf.freq && ' (' + node.meshrf.freq[0] + ' GHz)' || ''}</name>
-            <visibility>1</visibility>
             <Snippet maxLines="2"><![CDATA[
               ${node.node}<br/>${node2.node}
             ]]></Snippet>
@@ -908,7 +907,6 @@ module.exports = {
                                 let kmlpath_rf = (`
           <Placemark>
             <name>${node.meshrf.freq && node.meshrf.freq[0] + ' GHz' || 'Unk Freq'} Link</name>
-            <visibility>0</visibility>
             <Snippet maxLines="2"><![CDATA[
               ${node.node}<br/>${node2.node}
             ]]></Snippet>
@@ -1023,6 +1021,31 @@ module.exports = {
         </ListStyle>
       </Style>
 
+      <Folder id="folder_paths_by_rf_band">
+        <name>Paths by RF Band</name>
+        <visibility>0</visibility>
+
+        <Folder id="folder_paths_rf_5">
+          <name>Paths 5 GHz Band</name>
+          ${kmlpaths_rf_5.join("\n")}
+        </Folder>        
+
+        <Folder id="folder_paths_rf_3">
+          <name>Paths 3 GHz Band</name>
+          ${kmlpaths_rf_3.join("\n")}
+        </Folder>
+
+        <Folder id="folder_paths_rf_2">
+          <name>Paths 2 GHz Band</name>
+          ${kmlpaths_rf_2.join("\n")}
+        </Folder>
+
+        <Folder id="folder_paths_rf_other">
+          <name>Paths Other RF</name>
+          ${kmlpaths_rf_other.join("\n")}
+        </Folder>
+      </Folder>
+
       <Folder id="folder_paths_by_type">
         <name>Paths by Type</name>
         <Folder id="folder_paths_type_rf">
@@ -1049,35 +1072,6 @@ module.exports = {
           <name>Paths Type Other</name>
           ${kmlpaths_type_other.join("\n")}
         </Folder>       
-      </Folder>
-
-      <Folder id="folder_paths_by_rf_band">
-        <name>Paths by RF Band</name>
-        <visibility>0</visibility>
-
-        <Folder id="folder_paths_rf_5">
-          <name>Paths 5 GHz Band</name>
-          <visibility>0</visibility>
-          ${kmlpaths_rf_5.join("\n")}
-        </Folder>        
-
-        <Folder id="folder_paths_rf_3">
-          <name>Paths 3 GHz Band</name>
-          <visibility>0</visibility>
-          ${kmlpaths_rf_3.join("\n")}
-        </Folder>
-
-        <Folder id="folder_paths_rf_2">
-          <name>Paths 2 GHz Band</name>
-          <visibility>0</visibility>
-          ${kmlpaths_rf_2.join("\n")}
-        </Folder>
-
-        <Folder id="folder_paths_rf_other">
-          <name>Paths Other RF</name>
-          <visibility>0</visibility>
-          ${kmlpaths_rf_other.join("\n")}
-        </Folder>
       </Folder>
 
     </Folder>

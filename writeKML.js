@@ -169,7 +169,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>00ffffff</color>
-        <width>0</width>
+        <width>1</width>
       </LineStyle>
       <BalloonStyle>
         <text><![CDATA[${balloon_template_node}]]></text>
@@ -209,7 +209,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>00ffffff</color>
-        <width>0</width>
+        <width>1</width>
       </LineStyle>
       <BalloonStyle>
         <text><![CDATA[${balloon_template_node}]]></text>
@@ -247,8 +247,8 @@ const kml_styles = `
         <scale>0</scale>
       </LabelStyle>
       <LineStyle>
-        <color>0ffffff</color>
-        <width>0</width>
+        <color>00ffffff</color>
+        <width>1</width>
       </LineStyle>
       <BalloonStyle>
         <text><![CDATA[${balloon_template_node}]]></text>
@@ -287,7 +287,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>00ffffff</color>
-        <width>0</width>
+        <width>1</width>
       </LineStyle>
       <BalloonStyle>
         <text><![CDATA[${balloon_template_node}]]></text>
@@ -326,7 +326,7 @@ const kml_styles = `
       </LabelStyle>
       <LineStyle>
         <color>00ffffff</color>
-        <width>0</width>
+        <width>1</width>
       </LineStyle>
       <BalloonStyle>
         <text><![CDATA[${balloon_template_node}]]></text>
@@ -355,11 +355,6 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_rf</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_rf">
-      <IconStyle>
-        <scale>0</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -372,11 +367,6 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_rf">
-      <IconStyle>
-        <scale>3</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -394,11 +384,6 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_dtd</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_dtd">
-      <IconStyle>
-        <scale>0</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -411,11 +396,6 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_dtd">
-      <IconStyle>
-        <scale>3</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -433,11 +413,6 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_tun</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_tun">
-      <IconStyle>
-        <scale>0</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -450,11 +425,6 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_tun">
-      <IconStyle>
-        <scale>3</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -472,11 +442,6 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_bb</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_bb">
-      <IconStyle>
-        <scale>0</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -489,11 +454,6 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_bb">
-      <IconStyle>
-        <scale>3</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -511,11 +471,6 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_other</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_other">
-      <IconStyle>
-        <scale>0</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -528,11 +483,6 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_other">
-      <IconStyle>
-        <scale>3</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -550,11 +500,6 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_2ghz</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_2ghz">
-      <IconStyle>
-        <scale>0</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -567,11 +512,6 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_2ghz">
-      <IconStyle>
-        <scale>3</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -589,11 +529,6 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_3ghz</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_3ghz">
-      <IconStyle>
-        <scale>0</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -606,11 +541,6 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_3ghz">
-      <IconStyle>
-        <scale>3</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -628,11 +558,6 @@ const kml_styles = `
       <Pair><key>highlight</key><styleUrl>#sh_path_5ghz</styleUrl></Pair>
     </StyleMap>
     <Style id="sn_path_5ghz">
-      <IconStyle>
-        <scale>0</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -645,11 +570,6 @@ const kml_styles = `
       </BalloonStyle>
     </Style>
     <Style id="sh_path_5ghz">
-      <IconStyle>
-        <scale>3</scale>
-        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href></Icon>
-        <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-      </IconStyle>
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
@@ -828,15 +748,11 @@ module.exports = {
                     // push linestring into Node Placemark multigoemetry
                     if (node2 && node2.lat && node2.lon) {
                         const host2 = node2.node.toLowerCase();
-      /*
-       * Disable for now as it make the web version flash a lot
-       *
                         kml_nodes.push(`          <LineString>
             <altitudeMode>relativeToGround</altitudeMode>
             <gx:drawOrder>${DRAW_ORDER['L1']}</gx:drawOrder>
             <coordinates>${node.lon},${node.lat},${line_alt} ${node2.lon},${node2.lat},${line_alt}</coordinates>
           </LineString>`);
-       */
                     
                         // process link for Paths Placemarks
                         const k1 = `${host1}/${host2}`;

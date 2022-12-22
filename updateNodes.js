@@ -4,7 +4,7 @@ const AbortController = require('abort-controller').AbortController;
 const Turf = require('@turf/turf');
 const Log = require("debug")("update");
 
-const DO_FETCH = true;
+const DO_FETCH = false;
 
 const FETCH_TIMEOUT = 20000;
 const MAX_RUNNING = 8;
@@ -189,11 +189,7 @@ module.exports = {
                     }
                     const hosts = node.hosts || [];
                     for (let i = 0; i < hosts.length; i++) {
-                        const hostname = hosts[i].name.toLowerCase();
-                        if (hostname.match(/^xlink\d+\./i)) {
-                            hostname = hostname.replace(/^xlink\d+\./i, "");
-                        }
-                        if (!hostname.match(/^dtdlink\./i) && !hostname.match(/^mid\d+\./i)) {
+                        if (!hostname.match(/^dtdlink\./i) && !hostname.match(/^mid\d+\./i) && !hostname.match(/^xlink\d+\./i)) {
                             if (!found[hostname]) {
                                 found[hostname] = true;
                                 pending.push({
@@ -275,7 +271,7 @@ module.exports = {
         Object.values(populated).forEach(node => {
             const host1 = node.node.toLowerCase();
             Object.values(node.link_info || {}).forEach(link => {
-                const host2 = link.hostname.toLowerCase();
+                const host2 = link.hostname.toLowerCase().replace(/^xlink\d+\./, "");
                 if (link.linkType === "DTD" && nodegroup[host1] !== nodegroup[host2]) {
                     link.linkType = 'BB';
                 }

@@ -189,6 +189,7 @@ module.exports = {
                     }
                     const hosts = node.hosts || [];
                     for (let i = 0; i < hosts.length; i++) {
+                        const hostname = hosts[i].name.toLowerCase();
                         if (!hostname.match(/^dtdlink\./i) && !hostname.match(/^mid\d+\./i) && !hostname.match(/^xlink\d+\./i)) {
                             if (!found[hostname]) {
                                 found[hostname] = true;

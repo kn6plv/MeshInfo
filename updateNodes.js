@@ -255,13 +255,11 @@ module.exports = {
                                 if (linkNode && linkNode.lat && linkNode.lon) {
                                     const dfrom = Turf.point([node.lon, node.lat]);
                                     const dto = Turf.point([linkNode.lon, linkNode.lat]);
-                                    if (Turf.distance(dfrom, dto, { units: "meters" }) >= 50) {
-                                        // Not a real DtD
-                                        return;
+                                    if (Turf.distance(dfrom, dto, { units: "meters" }) < 50) {
+                                        nodegroup[linkName] = groups[name];
                                     }
                                 }
                             }
-                            nodegroup[linkName] = groups[name];
                         }
                     });
                 }

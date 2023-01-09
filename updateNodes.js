@@ -262,12 +262,12 @@ module.exports = {
                             if (Turf.distance(dfrom, dto, { units: "meters" }) < 50) {
                                 sites[name].nodes.push(linkNode);
                             }
-                            else {
-                                link.linkType = "BB";
-                                link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
-                            }
                         }
                     }
+                }
+                if (link.hostname.match(/^xlink\d+\./i)) {
+                    link.linkType = "BB";
+                    link.hostname = linkName;
                 }
             });
         });

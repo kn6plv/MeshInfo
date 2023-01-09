@@ -124,7 +124,7 @@ async function readNode(name) {
         try {
             const ac = new AbortController();
             setTimeout(() => ac.abort(), FETCH_TIMEOUT);
-            const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?&hosts=1&services_local=1&link_info=1&lqm=1`, { signal: ac.signal });
+            const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1`, { signal: ac.signal });
             const v = await req.json();
             console.log(`${name}: success`);
             resolve(v);
@@ -151,6 +151,10 @@ function latLonBearingDistance(lat, lon, bearing, distance) {
         lat: lat2 / Math.PI * 180,
         lon: lon2 / Math.PI * 180
     };
+}
+
+function canonicalHostname(hostname) {
+    return hostname && hostname.toLowerCase().replace(/^dtdlink\./i, "").replace(/^mid\d+\./i, "").replace(/^xlink\d+\./i, "").replace(/\.local\.mesh$/, "");
 }
 
 module.exports = {
@@ -187,19 +191,16 @@ module.exports = {
                     if (!node.firstseen) {
                         node.firstseen = now;
                     }
-                    const hosts = node.hosts || [];
-                    for (let i = 0; i < hosts.length; i++) {
-                        const hostname = hosts[i].name.toLowerCase();
-                        if (!hostname.match(/^dtdlink\./i) && !hostname.match(/^mid\d+\./i) && !hostname.match(/^xlink\d+\./i)) {
-                            if (!found[hostname]) {
-                                found[hostname] = true;
-                                pending.push({
-                                    name: hosts[i].name,
-                                    attempts: 0
-                                });
-                            }
+                    Object.values(node.link_info || {}).forEach(link => {
+                        const hostname = canonicalHostname(link.hostname);
+                        if (!found[hostname]) {
+                            found[hostname] = true;
+                            pending.push({
+                                name: hostname,
+                                attempts: 0
+                            });
                         }
-                    }
+                    });
                 }
                 else {
                     if (++next.attempts < MAX_ATTEMPTS) {
@@ -231,51 +232,63 @@ module.exports = {
             await new Promise(resolve => done = resolve);
         }
 
-        // Group nodes together based on their DtD links and proximity.
-        const groups = {};
-        const nodegroup = {};
+        // Group nodes together at sites
+        const sites = {}
+        const assigned = {}
         Object.values(populated).forEach(node => {
             const name = node.node.toLowerCase();
-            node.mlat = node.lat;
-            node.mlon = node.lon;
-            if (nodegroup[name]) {
-                nodegroup[name].nodes.push(node);
+            if (name in assigned) {
+                return;
             }
-            else {
-                groups[name] = {
-                    nodes: [node]
-                };
-                nodegroup[name] = groups[name];
-                if (node.link_info) {
-                    Object.values(node.link_info).forEach(link => {
-                        if (link.linkType === "DTD") {
-                            const linkName = link.hostname.toLowerCase();
-                            if (node.lat && node.lon) {
-                                const linkNode = populated[linkName];
-                                if (linkNode && linkNode.lat && linkNode.lon) {
-                                    const dfrom = Turf.point([node.lon, node.lat]);
-                                    const dto = Turf.point([linkNode.lon, linkNode.lat]);
-                                    if (Turf.distance(dfrom, dto, { units: "meters" }) < 50) {
-                                        nodegroup[linkName] = groups[name];
-                                    }
-                                }
+            if (!(node.lat && node.lon)) {
+                return;
+            }
+            sites[name] = {
+                nodes: [ node ]
+            };
+            assigned[name] = true;
+            const dfrom = Turf.point([node.lon, node.lat]);
+            Object.values(node.link_info || {}).forEach(link => {
+                const linkName = canonicalHostname(link.hostname);
+                if (!(linkName in assigned)) {
+                    const linkNode = populated[linkName];
+                    if (linkNode && link.linkType === "DTD") {
+                        assigned[linkName] = true;
+                        if (!(linkNode.lat && linkNode.lon)) {
+                            sites[name].nodes.push(linkNode);
+                        }
+                        else {
+                            const dto = Turf.point([linkNode.lon, linkNode.lat]);
+                            if (Turf.distance(dfrom, dto, { units: "meters" }) < 50) {
+                                sites[name].nodes.push(linkNode);
+                            }
+                            else {
+                                link.linkType = "BB";
+                                link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
                             }
                         }
-                    });
-                }
-            }
-        });
-
-        // Mutate various link types to be more specific (specifically identify backbone links)
-        Object.values(populated).forEach(node => {
-            const host1 = node.node.toLowerCase();
-            Object.values(node.link_info || {}).forEach(link => {
-                const host2 = link.hostname.toLowerCase().replace(/^xlink\d+\./i, "");
-                if (link.linkType === "DTD" && nodegroup[host1] !== nodegroup[host2]) {
-                    link.linkType = "BB";
-                    link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
+                    }
                 }
             });
+        });
+
+        // Scan the node groups, and adjust the lat/lon measurements so the nodes are close but don't overlap
+        Object.values(sites).forEach(site => {
+            const nodes = site.nodes;
+            if (nodes.length == 1) {
+                return;
+            }
+            const angle = 360 / (nodes.length - 1);
+            let rot = 0;
+            for (let i = 1; i < nodes.length; i++) {
+                const node = nodes[i];
+                const nloc = latLonBearingDistance(nodes[0].lat, nodes[0].lon, rot, 20);
+                rot += angle;
+                if (node.lat != nloc.lat || node.lon != nloc.lon) {
+                    node.mlat = nloc.lat;
+                    node.mlon = nloc.lon;
+                }
+            }
         });
 
         // Find the specific hardware
@@ -283,36 +296,11 @@ module.exports = {
             node.node_details.hardware = HARDWARE[node.node_details.board_id] || node.node_details.model;
         });
 
-        // Scan the node groups, and adjust the lat/lon measurements so the nodes are close but don't overlap
-        Object.values(groups).forEach(group => {
-            const nodes = group.nodes;
-            if (nodes.length == 1) {
-                return;
-            }
-            const baseNode = nodes.find(node => node.lat && node.lon);
-            if (baseNode) {
-                const angle = 360 / (nodes.length - 1);
-                let rot = 0;
-                for (let i = 0; i < nodes.length; i++) {
-                    const node = nodes[i];
-                    if (node !== baseNode) {
-                        const nloc = latLonBearingDistance(baseNode.lat, baseNode.lon, rot, 20);
-                        rot += angle;
-                        if (node.lat != nloc.lat || node.lon != nloc.lon) {
-                            node.mlat = nloc.lat;
-                            node.mlon = nloc.lon;
-                        }
-                    }
-                }
-            }
-        });
-
         const nodes = Object.values(populated).sort((a, b) => a.node.localeCompare(b.node));
         console.log('*** Nodes: found', nodes.length);
 
         return {
-            nodes: nodes,
-            groups: nodegroup
+            nodes: nodes
         };
     }
 

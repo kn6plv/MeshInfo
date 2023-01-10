@@ -264,7 +264,7 @@ module.exports = {
                             }
                             else {
                                 link.linkType = "BB";
-                                link.hostname = link.name.replace(/^xlink\d+\./i, "");
+                                link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
                             }
                         }
                     }

@@ -4,7 +4,7 @@ const AbortController = require('abort-controller').AbortController;
 const Turf = require('@turf/turf');
 const Log = require("debug")("update");
 
-const DO_FETCH = true;
+const DO_FETCH = !process.env.NO_FETCH;
 
 const FETCH_TIMEOUT = 20000;
 const MAX_RUNNING = 8;
@@ -262,12 +262,12 @@ module.exports = {
                             if (Turf.distance(dfrom, dto, { units: "meters" }) < 50) {
                                 sites[name].nodes.push(linkNode);
                             }
+                            else {
+                                link.linkType = "BB";
+                                link.hostname = link.name.replace(/^xlink\d+\./i, "");
+                            }
                         }
                     }
-                }
-                if (link.hostname.match(/^xlink\d+\./i)) {
-                    link.linkType = "BB";
-                    link.hostname = linkName;
                 }
             });
         });

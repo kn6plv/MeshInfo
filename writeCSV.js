@@ -18,7 +18,7 @@ module.exports = {
             try {
                 csvtable.push(
                     `${node.node},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).ip || 'Unknown'},"${seen(node.lastseen)}","${node.sysinfo.uptime}",` +
-                    `a:3:{${node.sysinfo.loads.map((l, i) => 'i:' + i + ';d:' + l.toFixed(2) + ';').join('')}},` +
+                    `"a:3:{${node.sysinfo.loads.map((l, i) => 'i:' + i + ';d:' + l.toFixed(2) + ';').join('')}}",` +
                     `"${node.node_details.hardware}",` +
                     `"${node.node_details.model}",${node.node_details.firmware_version},` +
                     `${node.meshrf && node.meshrf.ssid || 'None'},${node.meshrf && node.meshrf.channel || 'None'},${node.meshrf && node.meshrf.chanbw || 'None'},` +

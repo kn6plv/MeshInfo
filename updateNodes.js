@@ -238,9 +238,15 @@ module.exports = {
                 const dfrom = Turf.point([node.lon, node.lat]);
                 Object.values(node.link_info || {}).forEach(link => {
                     const linkNode = populated[canonicalHostname(link.hostname)];
-                    if (linkNode && link.linkType === "DTD" && linkNode.lat && linkNode.lon) {
-                        const dto = Turf.point([linkNode.lon, linkNode.lat]);
-                        if (Turf.distance(dfrom, dto, { units: "meters" }) >= 50) {
+                    if (linkNode) {
+                        if (link.linkType === "DTD" && linkNode.lat && linkNode.lon) {
+                            const dto = Turf.point([linkNode.lon, linkNode.lat]);
+                            if (Turf.distance(dfrom, dto, { units: "meters" }) >= 50) {
+                                link.linkType = "BB";
+                                link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
+                            }
+                        }
+                        else if (link.linkType === "" && link.hostname.indexOf("xlink") === 0)  {
                             link.linkType = "BB";
                             link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
                         }

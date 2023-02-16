@@ -304,7 +304,7 @@ module.exports = {
 
         // Find the specific hardware
         Object.values(populated).forEach(node => {
-            node.node_details.hardware = HARDWARE[node.node_details.board_id] || node.node_details.model;
+            node.node_details.hardware = HARDWARE[node.node_details && node.node_details.board_id] || node.node_details.model;
         });
 
         const nodes = Object.values(populated).sort((a, b) => a.node.localeCompare(b.node));

@@ -185,7 +185,7 @@ module.exports = {
             const next = pending.splice(Math.floor(Math.random() * pending.length), 1)[0];
             if (next) {
                 const node = await readNode(next.name);
-                if (node) {
+                if (node && node.node_details) {
                     populated[node.node.toLowerCase()] = node;
                     node.lastseen = now;
                     if (!node.firstseen) {
@@ -270,7 +270,6 @@ module.exports = {
                 nodes: [ node ]
             };
             assigned[name] = true;
-            const dfrom = Turf.point([node.lon, node.lat]);
             Object.values(node.link_info || {}).forEach(link => {
                 const linkName = canonicalHostname(link.hostname);
                 if (!(linkName in assigned)) {
@@ -304,7 +303,7 @@ module.exports = {
 
         // Find the specific hardware
         Object.values(populated).forEach(node => {
-            node.node_details.hardware = HARDWARE[node.node_details && node.node_details.board_id] || (node.node_details && node.node_details.model) || "Unknown";
+            node.node_details.hardware = HARDWARE[node.node_details.board_id] || node.node_details.model;
         });
 
         const nodes = Object.values(populated).sort((a, b) => a.node.localeCompare(b.node));

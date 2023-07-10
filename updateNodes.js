@@ -260,13 +260,17 @@ module.exports = {
                 nodes: [ node ]
             };
             assigned[name] = true;
+            const dfrom = Turf.point([node.lon, node.lat]);
             Object.values(node.link_info || {}).forEach(link => {
                 const linkName = canonicalHostname(link.hostname);
                 if (!(linkName in assigned)) {
                     const linkNode = populated[linkName];
                     if (linkNode && link.linkType === "DTD") {
-                        assigned[linkName] = true;
-                        sites[name].nodes.push(linkNode);
+                        const dto = Turf.point([linkNode.lon, linkNode.lat]);
+                        if (Turf.distance(dfrom, dto, { units: "meters" }) < 50) {
+                            assigned[linkName] = true;
+                            sites[name].nodes.push(linkNode);
+                        }
                     }
                 }
             });

@@ -5,6 +5,7 @@ const Turf = require('@turf/turf');
 const Log = require("debug")("update");
 
 const DO_FETCH = !process.env.NO_FETCH;
+const DO_SUPERNODES = !!process.env.DO_SUPERNODES
 
 const FETCH_TIMEOUT = 20000;
 const MAX_RUNNING = 8;
@@ -191,7 +192,7 @@ module.exports = {
                     if (!node.firstseen) {
                         node.firstseen = now;
                     }
-                    if (!node.node_details.mesh_supernode) {
+                    if (!node.node_details.mesh_supernode || DO_SUPERNODES) {
                         Object.values(node.link_info || {}).forEach(link => {
                             const hostname = canonicalHostname(link.hostname);
                             if (!found[hostname]) {

@@ -191,16 +191,18 @@ module.exports = {
                     if (!node.firstseen) {
                         node.firstseen = now;
                     }
-                    Object.values(node.link_info || {}).forEach(link => {
-                        const hostname = canonicalHostname(link.hostname);
-                        if (!found[hostname]) {
-                            found[hostname] = true;
-                            pending.push({
-                                name: hostname,
-                                attempts: 0
-                            });
-                        }
-                    });
+                    if (!node.node_details.mesh_supernode) {
+                        Object.values(node.link_info || {}).forEach(link => {
+                            const hostname = canonicalHostname(link.hostname);
+                            if (!found[hostname]) {
+                                found[hostname] = true;
+                                pending.push({
+                                    name: hostname,
+                                    attempts: 0
+                                });
+                            }
+                        });
+                    }
                 }
                 else {
                     if (++next.attempts < MAX_ATTEMPTS) {

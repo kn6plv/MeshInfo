@@ -155,7 +155,7 @@ function latLonBearingDistance(lat, lon, bearing, distance) {
 }
 
 function canonicalHostname(hostname) {
-    return hostname && hostname.toLowerCase().replace(/^dtdlink\./i, "").replace(/^mid\d+\./i, "").replace(/^xlink\d+\./i, "").replace(/\.local\.mesh$/, "");
+    return hostname && hostname.toLowerCase().replace(/^dtdlink\./i, "").replace(/^mid\d+\./i, "").replace(/^xlink\d+\./i, "").replace(/^supernode\./i, "").replace(/\.local\.mesh$/, "");
 }
 
 module.exports = {

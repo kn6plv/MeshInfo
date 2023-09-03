@@ -119,13 +119,13 @@ const HARDWARE = {
     "0xe1a5": "Ubiquiti PowerBridge M5"
 };
 
-async function readNode(name) {
+async function readNode(name, hosts) {
     Log('readNode', name);
     return new Promise(async resolve => {
         try {
             const ac = new AbortController();
             setTimeout(() => ac.abort(), FETCH_TIMEOUT);
-            const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1`, { signal: ac.signal });
+            const req = await fetch(`http://${name}.local.mesh/cgi-bin/sysinfo.json?link_info=1&lqm=1${hosts ? "&hosts=1" : ""}`, { signal: ac.signal });
             const v = await req.json();
             console.log(`${name}: success`);
             resolve(v);
@@ -182,10 +182,12 @@ module.exports = {
         found[ROOT.toLowerCase()] = true;
         pending.push({ name: ROOT, attempts: 0 });
 
+        let hosts = true;
         async function crawl() {
             const next = pending.splice(Math.floor(Math.random() * pending.length), 1)[0];
             if (next) {
-                const node = await readNode(next.name);
+                const node = await readNode(next.name, hosts);
+                hosts = false;
                 if (node && node.node_details) {
                     populated[node.node.toLowerCase()] = node;
                     node.lastseen = now;
@@ -193,6 +195,16 @@ module.exports = {
                         node.firstseen = now;
                     }
                     if (!node.node_details.mesh_supernode || DO_SUPERNODES) {
+                        Object.values(node.hosts).forEach(host => {
+                            const hostname = canonicalHostname(host.name);
+                            if (!found[hostname]) {
+                                found[hostname] = true;
+                                pending.push({
+                                    name: hostname,
+                                    attempts: 0
+                                });
+                            }
+                        });
                         Object.values(node.link_info || {}).forEach(link => {
                             const hostname = canonicalHostname(link.hostname);
                             if (!found[hostname]) {

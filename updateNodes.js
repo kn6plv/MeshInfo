@@ -195,7 +195,7 @@ module.exports = {
                         node.firstseen = now;
                     }
                     if (!node.node_details.mesh_supernode || DO_SUPERNODES) {
-                        Object.values(node.hosts).forEach(host => {
+                        (node.hosts || []).forEach(host => {
                             const hostname = canonicalHostname(host.name);
                             if (!found[hostname]) {
                                 found[hostname] = true;

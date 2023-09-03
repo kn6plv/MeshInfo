@@ -182,7 +182,7 @@ module.exports = {
         found[ROOT.toLowerCase()] = true;
         pending.push({ name: ROOT, attempts: 0 });
 
-        let hosts = true;
+        let hosts = DO_SUPERNODES;
         async function crawl() {
             const next = pending.splice(Math.floor(Math.random() * pending.length), 1)[0];
             if (next) {

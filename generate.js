@@ -15,7 +15,7 @@ catch (e) {
   Log(e);
 }
 
-require("./updateNodes").update(oldjson).then(update => {
+require("./updateNodes2").update(oldjson).then(update => {
 
   require("./writeCSV").write(update, CSVFILE);
   require("./writeKML").write(update, KMLFILE);

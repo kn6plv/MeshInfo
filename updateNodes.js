@@ -129,10 +129,23 @@ async function readNode(name, hosts) {
             const v = await req.json();
             console.log(`${name}: success`);
             resolve(v);
+            return;
+        }
+        catch (e) {
+            Log('failed 80', name, e);
+        }
+        try {
+            const ac = new AbortController();
+            setTimeout(() => ac.abort(), FETCH_TIMEOUT);
+            const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1${hosts ? "&hosts=1" : ""}`, { signal: ac.signal });
+            const v = await req.json();
+            console.log(`${name}: success`);
+            resolve(v);
+            return;
         }
         catch (e) {
             console.log(`${name}: failed`);
-            Log('failed', name, e);
+            Log('failed 8080', name, e);
             resolve(null);
         }
     });
@@ -255,6 +268,17 @@ module.exports = {
                     if (link.linkType === "" && link.hostname.indexOf("xlink") === 0)  {
                         link.linkType = "BB";
                         link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
+                    }
+                });
+            }
+        });
+
+        // Supernode detection
+        Object.values(populated).forEach(node => {
+            if (node.node_details.mesh_supernode) {
+                Object.values(node.link_info || {}).forEach(link => {
+                    if (link.linkType == "TUN") {
+                        link.linkType = "STUN"
                     }
                 });
             }

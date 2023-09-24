@@ -7,6 +7,9 @@ const CSVFILE = "out.csv";
 const JSONFILE = "out.json";
 const KMLFILE = "out.kml";
 
+process.on('uncaughtException', () => process.exit(1));
+process.on('unhandledRejection', () => process.exit(1));
+
 let oldjson = null;
 try {
   oldjson = JSON.parse(fs.readFileSync(JSONFILE, { encoding: 'utf8' }));
@@ -15,7 +18,7 @@ catch (e) {
   Log(e);
 }
 
-require("./updateNodes2").update(oldjson).then(update => {
+require("./updateNodes").update(oldjson).then(update => {
 
   require("./writeCSV").write(update, CSVFILE);
   require("./writeKML").write(update, KMLFILE);

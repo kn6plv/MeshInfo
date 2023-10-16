@@ -190,74 +190,91 @@ module.exports = {
             lastbuilt = oldjson.date;
         }
 
-        const ROOT = process.argv[2] || 'localnode';
+        if (process.argv[2] === "--remove") {
+            // Remove specific node
+            const node = canonicalHostname(process.argv[3] || "");
+            if (node === "") {
+                console.log("No node name given");
+                process.exit(1);
+            }
+            if (!(node in populated)) {
+                console.log("Node not found: " + node);
+                process.exit(1);
+            }
+            delete populated[node];
+        }
+        else {
+            // Normal update
 
-        found[ROOT.toLowerCase()] = true;
-        pending.push({ name: ROOT, attempts: 0 });
+            const ROOT = process.argv[2] || 'localnode';
 
-        let hosts = DO_SUPERNODES;
-        async function crawl() {
-            const next = pending.splice(Math.floor(Math.random() * pending.length), 1)[0];
-            if (next) {
-                const node = await readNode(next.name, hosts);
-                hosts = false;
-                if (node && node.node_details) {
-                    populated[node.node.toLowerCase()] = node;
-                    node.lastseen = now;
-                    if (!node.firstseen) {
-                        node.firstseen = now;
+            found[ROOT.toLowerCase()] = true;
+            pending.push({ name: ROOT, attempts: 0 });
+
+            let hosts = DO_SUPERNODES;
+            async function crawl() {
+                const next = pending.splice(Math.floor(Math.random() * pending.length), 1)[0];
+                if (next) {
+                    const node = await readNode(next.name, hosts);
+                    hosts = false;
+                    if (node && node.node_details) {
+                        populated[node.node.toLowerCase()] = node;
+                        node.lastseen = now;
+                        if (!node.firstseen) {
+                            node.firstseen = now;
+                        }
+                        if (!node.node_details.mesh_supernode || DO_SUPERNODES) {
+                            (node.hosts || []).forEach(host => {
+                                const hostname = canonicalHostname(host.name);
+                                if (!found[hostname]) {
+                                    found[hostname] = true;
+                                    pending.push({
+                                        name: hostname,
+                                        attempts: 0
+                                    });
+                                }
+                            });
+                            Object.values(node.link_info || {}).forEach(link => {
+                                const hostname = canonicalHostname(link.hostname);
+                                if (!found[hostname]) {
+                                    found[hostname] = true;
+                                    pending.push({
+                                        name: hostname,
+                                        attempts: 0
+                                    });
+                                }
+                            });
+                        }
                     }
-                    if (!node.node_details.mesh_supernode || DO_SUPERNODES) {
-                        (node.hosts || []).forEach(host => {
-                            const hostname = canonicalHostname(host.name);
-                            if (!found[hostname]) {
-                                found[hostname] = true;
-                                pending.push({
-                                    name: hostname,
-                                    attempts: 0
-                                });
-                            }
-                        });
-                        Object.values(node.link_info || {}).forEach(link => {
-                            const hostname = canonicalHostname(link.hostname);
-                            if (!found[hostname]) {
-                                found[hostname] = true;
-                                pending.push({
-                                    name: hostname,
-                                    attempts: 0
-                                });
-                            }
-                        });
-                    }
-                }
-                else {
-                    if (++next.attempts < MAX_ATTEMPTS) {
-                        pending.push(next);
+                    else {
+                        if (++next.attempts < MAX_ATTEMPTS) {
+                            pending.push(next);
+                        }
                     }
                 }
             }
-        }
 
-        let count = 0;
-        let done;
-        function docrawl() {
-            while (count < MAX_RUNNING) {
-                count++;
-                crawl().then(_ => {
-                    count--;
-                    if (pending.length) {
-                        docrawl();
-                    }
-                    else if (count === 0) {
-                        done();
-                    }
-                });
+            let count = 0;
+            let done;
+            function docrawl() {
+                while (count < MAX_RUNNING) {
+                    count++;
+                    crawl().then(_ => {
+                        count--;
+                        if (pending.length) {
+                            docrawl();
+                        }
+                        else if (count === 0) {
+                            done();
+                        }
+                    });
+                }
             }
-        }
 
-        if (DO_FETCH) {
-            docrawl();
-            await new Promise(resolve => done = resolve);
+            if (DO_FETCH) {
+                docrawl();
+                await new Promise(resolve => done = resolve);
+            }
         }
 
         // Backbone detection

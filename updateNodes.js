@@ -379,7 +379,7 @@ module.exports = {
                         }
                     }
                     if (!yes) {
-                        node.meshrf.status ="off";
+                        node.meshrf = { status: "off" };
                     }
                     break;
                 default:

@@ -915,7 +915,7 @@ module.exports = {
             <description><![CDATA[
               ${node.node}<br/> --- to --- <br/>${node2.node}
             ]]></description>
-            <styleUrl>${PATH_STYLE[node.meshrf.freq[0]] || '#sm_path_other'}</styleUrl>
+            <styleUrl>${PATH_STYLE[(node.meshrf.freq || {})[0]] || '#sm_path_other'}</styleUrl>
             <ExtendedData>
               <Data name="node1">
                 <displayName>Node 1</displayName>

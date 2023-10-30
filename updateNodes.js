@@ -372,9 +372,8 @@ module.exports = {
                 case 'MikroTik hAP ac2':
                 case 'MikroTik hAP ac3':
                     let yes = false;
-                    const tr = ((node.lqm || {}).info || {}).trackers || {};
-                    for (let t in tr) {
-                        if (t.type == "RF") {
+                    for (let l in (node.link_info || {})) {
+                        if (l.linkType == "RF") {
                             yes = true;
                             break;
                         }

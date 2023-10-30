@@ -368,6 +368,7 @@ module.exports = {
             // these as 2.4GHz nodes
             switch (node.node_details.model) {
                 case "MikroTik RouterBOARD RB952Ui-5ac2nD":
+                case "MikroTik RouterBOARD 952Ui-5ac2nD":
                 case "MikroTik RouterBOARD 952Ui-5ac2nD (hAP ac lite)":
                 case 'MikroTik hAP ac2':
                 case 'MikroTik hAP ac3':

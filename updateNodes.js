@@ -183,7 +183,7 @@ module.exports = {
 
         if (oldjson) {
             oldjson.nodeInfo.forEach(node => {
-                if (now - node.data.lastseen < AGE_OUT) {
+                if (now - node.data.lastseen < AGE_OUT || NO_FETCH) {
                     populated[node.data.node.toLowerCase()] = node.data;
                 }
             });
@@ -379,7 +379,7 @@ module.exports = {
                         }
                     }
                     if (!yes) {
-                        node.meshrf = { status: "off" };
+                        node.meshrf.status ="off";
                     }
                     break;
                 default:

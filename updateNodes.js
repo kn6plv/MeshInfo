@@ -362,6 +362,31 @@ module.exports = {
             node.node_details.hardware = HARDWARE[node.node_details.board_id] || node.node_details.model;
         });
 
+        // Hardware tweaks
+        Object.values(populated).forEach(node => {
+            // If a hAP (lite, ac2 or ac3) has no peers, disable the wifi in the reports so we stop counting
+            // these as 2.4GHz nodes
+            switch (node.node_details.model) {
+                case "MikroTik RouterBOARD 952Ui-5ac2nD (hAP ac lite)":
+                case 'MikroTik hAP ac2':
+                case 'MikroTik hAP ac3':
+                    let yes = false;
+                    const tr = ((node.lqm || {}).info || {}).trackers || {};
+                    for (let t in tr) {
+                        if (t.type == "RF") {
+                            yes = true;
+                            break;
+                        }
+                    }
+                    if (!yes) {
+                        node.meshrf = { status: "off" };
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
         const nodes = Object.values(populated).sort((a, b) => a.node.localeCompare(b.node));
         console.log('*** Nodes: found', nodes.length);
 

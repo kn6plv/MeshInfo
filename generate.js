@@ -19,11 +19,14 @@ catch (e) {
 }
 
 require("./updateNodes").update(oldjson).then(update => {
-
-  require("./writeCSV").write(update, CSVFILE);
-  require("./writeKML").write(update, KMLFILE);
-  require("./writeJSON").write(update, JSONFILE);
-  
+  try {
+    require("./writeCSV").write(update, CSVFILE);
+    require("./writeKML").write(update, KMLFILE);
+    require("./writeJSON").write(update, JSONFILE);
+  }
+  catch (e) {
+    console.log(e);
+  }
   process.exit();
 
 });

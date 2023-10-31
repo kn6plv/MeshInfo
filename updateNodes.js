@@ -183,7 +183,7 @@ module.exports = {
 
         if (oldjson) {
             oldjson.nodeInfo.forEach(node => {
-                if (now - node.data.lastseen < AGE_OUT || NO_FETCH) {
+                if (now - node.data.lastseen < AGE_OUT || !DO_FETCH) {
                     populated[node.data.node.toLowerCase()] = node.data;
                 }
             });

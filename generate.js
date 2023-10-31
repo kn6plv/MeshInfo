@@ -25,8 +25,10 @@ require("./updateNodes").update(oldjson).then(update => {
     require("./writeJSON").write(update, JSONFILE);
   }
   catch (e) {
-    console.log(e);
+    Log(e);
   }
   process.exit();
-
+}).catch(e => {
+  Log(e);
+  process.exit();
 });

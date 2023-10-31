@@ -3,3 +3,4 @@ node_modules
 *.csv.zip
 *.json
 *.kml
+*.bak

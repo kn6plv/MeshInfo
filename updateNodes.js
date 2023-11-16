@@ -122,6 +122,7 @@ const HARDWARE = {
 async function readNode(name, hosts) {
     Log('readNode', name);
     return new Promise(async resolve => {
+        let timeouts = 0;
         try {
             const ac = new AbortController();
             setTimeout(() => ac.abort(), FETCH_TIMEOUT);
@@ -133,6 +134,9 @@ async function readNode(name, hosts) {
         }
         catch (e) {
             Log('failed 80', name, e);
+            if (e.name === 'AbortError') {
+                timeouts++;
+            }
         }
         try {
             const ac = new AbortController();
@@ -146,8 +150,11 @@ async function readNode(name, hosts) {
         catch (e) {
             console.log(`${name}: failed`);
             Log('failed 8080', name, e);
-            resolve(null);
+            if (e.name === 'AbortError') {
+                timeouts++;
+            }
         }
+        resolve(timeouts > 0 ? "timeout" : "fail");
     });
 }
 
@@ -217,7 +224,15 @@ module.exports = {
                 if (next) {
                     const node = await readNode(next.name, hosts);
                     hosts = false;
-                    if (node && node.node_details) {
+                    if (node === "timeout") {
+                        if (++next.attempts < MAX_ATTEMPTS) {
+                            pending.push(next);
+                        }
+                    }
+                    else if (node === "fail") {
+                        // Ignore
+                    }
+                    else if (node.node_details) {
                         populated[node.node.toLowerCase()] = node;
                         node.lastseen = now;
                         if (!node.firstseen) {
@@ -244,11 +259,6 @@ module.exports = {
                                     });
                                 }
                             });
-                        }
-                    }
-                    else {
-                        if (++next.attempts < MAX_ATTEMPTS) {
-                            pending.push(next);
                         }
                     }
                 }

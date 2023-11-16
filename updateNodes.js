@@ -119,6 +119,8 @@ const HARDWARE = {
     "0xe1a5": "Ubiquiti PowerBridge M5"
 };
 
+const nodeFilter = /^[a-zA-z]+[0-9][a-zA-Z]+\-/gi;
+
 async function readNode(name, hosts) {
     Log('readNode', name);
     return new Promise(async resolve => {
@@ -243,20 +245,24 @@ module.exports = {
                                 const hostname = canonicalHostname(host.name);
                                 if (!found[hostname]) {
                                     found[hostname] = true;
-                                    pending.push({
-                                        name: hostname,
-                                        attempts: 0
-                                    });
+                                    if (nodeFilter.test(hostname)) {
+                                        pending.push({
+                                            name: hostname,
+                                            attempts: 0
+                                        });
+                                    }
                                 }
                             });
                             Object.values(node.link_info || {}).forEach(link => {
                                 const hostname = canonicalHostname(link.hostname);
                                 if (!found[hostname]) {
                                     found[hostname] = true;
-                                    pending.push({
-                                        name: hostname,
-                                        attempts: 0
-                                    });
+                                    if (nodeFilter.test(hostname)) {
+                                        pending.push({
+                                            name: hostname,
+                                            attempts: 0
+                                        });
+                                    }
                                 }
                             });
                         }

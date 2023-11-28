@@ -119,7 +119,7 @@ const HARDWARE = {
     "0xe1a5": "Ubiquiti PowerBridge M5"
 };
 
-const nodeFilter = /^[a-zA-z]+[0-9][a-zA-Z]+\-/gi;
+const nodeFilter = /^[a-zA-z]+[0-9][a-zA-Z]+\-/i;
 
 async function readNode(name, hosts) {
     Log('readNode', name);
@@ -220,7 +220,7 @@ module.exports = {
             found[ROOT.toLowerCase()] = true;
             pending.push({ name: ROOT, attempts: 0 });
 
-            let hosts = DO_SUPERNODES;
+            let hosts = true;
             async function crawl() {
                 const next = pending.splice(Math.floor(Math.random() * pending.length), 1)[0];
                 if (next) {
@@ -244,8 +244,10 @@ module.exports = {
                             (node.hosts || []).forEach(host => {
                                 const hostname = canonicalHostname(host.name);
                                 if (!found[hostname]) {
+                                    Log('Found', hostname);
                                     found[hostname] = true;
                                     if (nodeFilter.test(hostname)) {
+                                        Log('Pending', hostname);
                                         pending.push({
                                             name: hostname,
                                             attempts: 0
@@ -256,8 +258,10 @@ module.exports = {
                             Object.values(node.link_info || {}).forEach(link => {
                                 const hostname = canonicalHostname(link.hostname);
                                 if (!found[hostname]) {
+                                    Log('Found', hostname);
                                     found[hostname] = true;
                                     if (nodeFilter.test(hostname)) {
+                                        Log('Pending', hostname);
                                         pending.push({
                                             name: hostname,
                                             attempts: 0

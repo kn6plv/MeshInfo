@@ -300,13 +300,13 @@ module.exports = {
             }
         }
 
-        // Backbone detection
+        // XLink detection
         Object.values(populated).forEach(node => {
             if (node.lat && node.lon) {
                 const dfrom = Turf.point([node.lon, node.lat]);
                 Object.values(node.link_info || {}).forEach(link => {
                     if (link.linkType === "" && link.hostname.indexOf("xlink") === 0)  {
-                        link.linkType = "BB";
+                        link.linkType = "XLK";
                         link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
                     }
                 });
@@ -318,7 +318,7 @@ module.exports = {
             if (node.node_details.mesh_supernode) {
                 Object.values(node.link_info || {}).forEach(link => {
                     if (link.linkType == "TUN") {
-                        link.linkType = "STUN"
+                        link.linkType = "SUP"
                     }
                 });
             }

@@ -306,7 +306,7 @@ module.exports = {
                 const dfrom = Turf.point([node.lon, node.lat]);
                 Object.values(node.link_info || {}).forEach(link => {
                     if (link.linkType === "" && link.hostname.indexOf("xlink") === 0)  {
-                        link.linkType = "XLK";
+                        link.linkType = "XLINK";
                         link.hostname = link.hostname.replace(/^xlink\d+\./i, "");
                     }
                 });
@@ -318,7 +318,7 @@ module.exports = {
             if (node.node_details.mesh_supernode) {
                 Object.values(node.link_info || {}).forEach(link => {
                     if (link.linkType == "TUN") {
-                        link.linkType = "SUP"
+                        link.linkType = "SUPER"
                     }
                 });
             }

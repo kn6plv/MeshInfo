@@ -11,6 +11,7 @@ const FETCH_TIMEOUT = 20000;
 const MAX_RUNNING = 8;
 const MAX_ATTEMPTS = 2;
 const AGE_OUT = 7 * 24 * 60 * 60;
+const MAX_RADIUS = process.env.MAX_RADIUS || 200;
 
 const HARDWARE = {
     "Meraki MR16": "Meraki MR16",
@@ -121,14 +122,14 @@ const HARDWARE = {
 
 const nodeFilter = /^[a-zA-z]+[0-9][a-zA-Z]+\-/i;
 
-async function readNode(name, hosts) {
+async function readNode(name) {
     Log('readNode', name);
     return new Promise(async resolve => {
         let timeouts = 0;
         try {
             const ac = new AbortController();
             setTimeout(() => ac.abort(), FETCH_TIMEOUT);
-            const req = await fetch(`http://${name}.local.mesh/cgi-bin/sysinfo.json?link_info=1&lqm=1${hosts ? "&hosts=1" : ""}`, { signal: ac.signal });
+            const req = await fetch(`http://${name}.local.mesh/cgi-bin/sysinfo.json?link_info=1&lqm=1`, { signal: ac.signal });
             const v = await req.json();
             console.log(`${name}: success`);
             resolve(v);
@@ -143,7 +144,7 @@ async function readNode(name, hosts) {
         try {
             const ac = new AbortController();
             setTimeout(() => ac.abort(), FETCH_TIMEOUT);
-            const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1${hosts ? "&hosts=1" : ""}`, { signal: ac.signal });
+            const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1`, { signal: ac.signal });
             const v = await req.json();
             console.log(`${name}: success`);
             resolve(v);
@@ -187,6 +188,7 @@ module.exports = {
         const found = {};
         const populated = {};
         const pending = [];
+        let root = null;
 
         const now = Math.floor(Date.now() / 1000);
 
@@ -220,12 +222,10 @@ module.exports = {
             found[ROOT.toLowerCase()] = true;
             pending.push({ name: ROOT, attempts: 0 });
 
-            let hosts = true;
             async function crawl() {
                 const next = pending.splice(Math.floor(Math.random() * pending.length), 1)[0];
                 if (next) {
-                    const node = await readNode(next.name, hosts);
-                    hosts = false;
+                    const node = await readNode(next.name);
                     if (node === "timeout") {
                         if (++next.attempts < MAX_ATTEMPTS) {
                             pending.push(next);
@@ -241,10 +241,10 @@ module.exports = {
                             node.firstseen = now;
                         }
                         if (!node.node_details.mesh_supernode || DO_SUPERNODES) {
-                            (node.hosts || []).forEach(host => {
+                            /* (node.hosts || []).forEach(host => {
                                 const hostname = canonicalHostname(host.name);
                                 if (!found[hostname]) {
-                                    Log('Found', hostname);
+                                    Log('Found host', hostname);
                                     found[hostname] = true;
                                     if (nodeFilter.test(hostname)) {
                                         Log('Pending', hostname);
@@ -254,11 +254,11 @@ module.exports = {
                                         });
                                     }
                                 }
-                            });
+                            }); */
                             Object.values(node.link_info || {}).forEach(link => {
                                 const hostname = canonicalHostname(link.hostname);
                                 if (!found[hostname]) {
-                                    Log('Found', hostname);
+                                    Log('Found link', hostname);
                                     found[hostname] = true;
                                     if (nodeFilter.test(hostname)) {
                                         Log('Pending', hostname);
@@ -269,6 +269,9 @@ module.exports = {
                                     }
                                 }
                             });
+                        }
+                        if (!root && node.lat && node.lon) {
+                            root = node;
                         }
                     }
                 }
@@ -376,6 +379,18 @@ module.exports = {
                 }
             }
         });
+
+        // Remove any nodes too far away. We'll assume these are their by accident.
+        if (!DO_SUPERNODES && root) {
+            const center = Turf.point([root.lon, root.lat]);
+            Object.values(populated).forEach(node => {
+                if (node.lat && node.lon) {
+                    if (Turf.distance(center, Turf.point([node.lon, node.lat]), { units: "miles" }) > MAX_RADIUS) {
+                        delete populated[node.node.toLowerCase()];
+                    }
+                }
+            });
+        }
 
         // Find the specific hardware
         Object.values(populated).forEach(node => {

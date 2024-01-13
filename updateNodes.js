@@ -385,7 +385,7 @@ module.exports = {
             const center = Turf.point([root.lon, root.lat]);
             Object.values(populated).forEach(node => {
                 if (node.lat && node.lon) {
-                    if (Turf.distance(center, Turf.point([node.lon, node.lat]), { units: "miles" }) > MAX_RADIUS) {
+                    if (Turf.distance(center, Turf.point([node.lon || node.mlon, node.lat || node.mlat]), { units: "miles" }) > MAX_RADIUS) {
                         delete populated[node.node.toLowerCase()];
                     }
                 }

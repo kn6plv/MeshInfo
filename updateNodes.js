@@ -241,20 +241,6 @@ module.exports = {
                             node.firstseen = now;
                         }
                         if (!node.node_details.mesh_supernode || DO_SUPERNODES) {
-                            /* (node.hosts || []).forEach(host => {
-                                const hostname = canonicalHostname(host.name);
-                                if (!found[hostname]) {
-                                    Log('Found host', hostname);
-                                    found[hostname] = true;
-                                    if (nodeFilter.test(hostname)) {
-                                        Log('Pending', hostname);
-                                        pending.push({
-                                            name: hostname,
-                                            attempts: 0
-                                        });
-                                    }
-                                }
-                            }); */
                             Object.values(node.link_info || {}).forEach(link => {
                                 const hostname = canonicalHostname(link.hostname);
                                 if (!found[hostname]) {
@@ -317,7 +303,7 @@ module.exports = {
         Object.values(populated).forEach(node => {
             if (node.node_details.mesh_supernode) {
                 Object.values(node.link_info || {}).forEach(link => {
-                    if (link.linkType == "TUN") {
+                    if (link.linkType == "TUN" || link.linkType == "WIREGUARD") {
                         link.linkType = "SUPER"
                     }
                 });

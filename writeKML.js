@@ -1,6 +1,5 @@
 
 const fs = require("fs");
-const Log = require("debug")("kml");
 
 // KML shared Styles section
 

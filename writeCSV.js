@@ -1,6 +1,5 @@
 
 const fs = require("fs");
-const Log = require("debug")("csv");
 
 function seen(when) {
     const d = new Date(when * 1000);

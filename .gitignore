@@ -4,3 +4,4 @@ node_modules
 *.json
 *.kml
 *.bak
+out.js

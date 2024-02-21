@@ -6,6 +6,7 @@ const Log = require('debug')('main');
 const CSVFILE = "out.csv";
 const JSONFILE = "out.json";
 const KMLFILE = "out.kml";
+const JSFILE = "out.js";
 
 process.on('uncaughtException', () => process.exit(1));
 process.on('unhandledRejection', () => process.exit(1));
@@ -23,6 +24,7 @@ require("./updateNodes").update(oldjson).then(update => {
     require("./writeCSV").write(update, CSVFILE);
     require("./writeKML").write(update, KMLFILE);
     require("./writeJSON").write(update, JSONFILE);
+    require("./writeJS").write(update, JSFILE);
   }
   catch (e) {
     Log(e);

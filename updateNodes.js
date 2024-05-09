@@ -259,6 +259,20 @@ module.exports = {
                         if (!root && node.lat && node.lon) {
                             root = node;
                         }
+                        // Fixup 900MHz devices
+                        if (node.meshrf && node.meshrf.status === "on") {
+                            switch (node.node_details.board_id) {
+                                case "0xe009":
+                                case "0xe1b9":
+                                case "0xe239":
+                                    // Fixup 900MHz devices
+                                    node.meshrf.freq = "" + (node.meshrf.freq - 1520);
+                                    node.meshrf.channel = node.meshrf.freq;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     }
                 }
             }
@@ -406,21 +420,6 @@ module.exports = {
                     break;
                 default:
                     break;
-            }
-        });
-        Object.values(populated).forEach(node => {
-            if (node.meshrf.status === "on") {
-                switch (node.node_details.board_id) {
-                    case "0xe009":
-                    case "0xe1b9":
-                    case "0xe239":
-                        // Fixup 900MHz devices
-                        node.meshrf.freq = "" + (node.meshrf.freq - 1520);
-                        node.meshrf.channel = node.meshrf.freq;
-                        break;
-                    default:
-                        break;
-                }
             }
         });
 

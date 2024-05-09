@@ -408,6 +408,21 @@ module.exports = {
                     break;
             }
         });
+        Object.values(populated).forEach(node => {
+            if (node.meshrf.status === "on") {
+                switch (node.node_details.board_id) {
+                    case "0xe009":
+                    case "0xe1b9":
+                    case "0xe239":
+                        // Fixup 900MHz devices
+                        node.meshrf.freq -= 1520;
+                        node.meshrf.channel = node.meshrf.freq;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
         const nodes = Object.values(populated).sort((a, b) => a.node.localeCompare(b.node));
         console.log('*** Nodes: found', nodes.length);

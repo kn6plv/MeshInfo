@@ -415,7 +415,7 @@ module.exports = {
                     case "0xe1b9":
                     case "0xe239":
                         // Fixup 900MHz devices
-                        node.meshrf.freq -= 1520;
+                        node.meshrf.freq = "" + (node.meshrf.freq - 1520);
                         node.meshrf.channel = node.meshrf.freq;
                         break;
                     default:

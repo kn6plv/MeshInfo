@@ -349,7 +349,7 @@ module.exports = {
                     if (linkNode && link.linkType === "DTD") {
                         if (linkNode.lat && linkNode.lon) {
                             const dto = Turf.point([linkNode.lon, linkNode.lat]);
-                            if (Turf.distance(dfrom, dto, { units: "meters" }) < 50) {
+                            if (Turf.distance(dfrom, dto, { units: "meters" }) < 100) {
                                 assigned[linkName] = true;
                                 sites[name].nodes.push(linkNode);
                             }
@@ -369,20 +369,40 @@ module.exports = {
             if (nodes.length == 1) {
                 return;
             }
-            const angle = 360 / (nodes.length - 1);
-            let rot = 0;
-            for (let i = 1; i < nodes.length; i++) {
+            const arrange = Array(nodes.length);
+            const step = 360 / arrange.length;
+            const extras = [];
+            for (let i = 0; i < nodes.length; i++) {
                 const node = nodes[i];
-                const nloc = latLonBearingDistance(nodes[0].lat, nodes[0].lon, rot, 20);
-                rot += angle;
-                if (node.lat != nloc.lat || node.lon != nloc.lon) {
-                    node.mlat = nloc.lat;
-                    node.mlon = nloc.lon;
+                const azimuth = ((node.meshrf && node.meshrf.azimuth) || 0);
+                const spot = Math.floor(azimuth / step);
+                if (!arrange[spot]) {
+                    arrange[spot] = node;
                 }
+                else {
+                    extras.push(node);
+                }
+            }
+            for (let i = 0; i < extras.length; i++) {
+                const node = extras[i];
+                const azimuth = ((node.meshrf && node.meshrf.azimuth) || 0);
+                const spot = Math.floor(azimuth / step);
+                for (let j = 0; j < arrange.length; j++) {
+                    const nspot = (spot + j) % arrange.length;
+                    if (!arrange[nspot]) {
+                        arrange[nspot] = node;
+                    }
+                }
+            }
+            for (let i = 0; i < arrange.length; i++) {
+                const node = arrange[i];
+                const nloc = latLonBearingDistance(nodes[0].lat, nodes[0].lon, i * step, 20);
+                node.mlat = nloc.lat;
+                node.mlon = nloc.lon;
             }
         });
 
-        // Remove any nodes too far away. We'll assume these are their by accident.
+        // Remove any nodes too far away. We'll assume these are there by accident.
         if (!DO_SUPERNODES && root) {
             const center = Turf.point([root.lon, root.lat]);
             Object.values(populated).forEach(node => {

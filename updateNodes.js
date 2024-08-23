@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 const AbortController = require('abort-controller').AbortController;
 const Turf = require('@turf/turf');
 const Log = require("debug")("update");
+const LogSite = require("debug")("sites");
 
 const DO_FETCH = !process.env.NO_FETCH;
 const DO_SUPERNODES = !!process.env.DO_SUPERNODES
@@ -365,12 +366,13 @@ module.exports = {
 
         // Scan the node groups, and adjust the lat/lon measurements so the nodes are close but don't overlap
         Object.values(sites).forEach(site => {
+            LogSite(site.nodes[0].node, site.nodes.length);
             const nodes = site.nodes;
             if (nodes.length == 1) {
                 return;
             }
             const arrange = Array(nodes.length);
-            const step = 360 / arrange.length;
+            const step = Math.max(16, 360 / arrange.length);
             const extras = [];
             for (let i = 0; i < nodes.length; i++) {
                 const node = nodes[i];
@@ -396,9 +398,11 @@ module.exports = {
             }
             for (let i = 0; i < arrange.length; i++) {
                 const node = arrange[i];
-                const nloc = latLonBearingDistance(nodes[0].lat, nodes[0].lon, i * step, 20);
-                node.mlat = nloc.lat;
-                node.mlon = nloc.lon;
+                if (node) {
+                    const nloc = latLonBearingDistance(nodes[0].lat, nodes[0].lon, i * step, 20);
+                    node.mlat = nloc.lat;
+                    node.mlon = nloc.lon;
+                }
             }
         });
 

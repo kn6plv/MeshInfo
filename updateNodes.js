@@ -376,10 +376,14 @@ module.exports = {
             const extras = [];
             for (let i = 0; i < nodes.length; i++) {
                 const node = nodes[i];
-                const azimuth = ((node.meshrf && node.meshrf.azimuth) || 0);
-                const spot = Math.floor(azimuth / step);
-                if (!arrange[spot]) {
-                    arrange[spot] = node;
+                if (node.meshrf && "azimuth" in node.meshrf) {
+                    const spot = Math.floor(node.meshrf.azimuth / step);
+                    if (!arrange[spot]) {
+                        arrange[spot] = node;
+                    }
+                    else {
+                        extras.push(node);
+                    }
                 }
                 else {
                     extras.push(node);
@@ -387,7 +391,7 @@ module.exports = {
             }
             for (let i = 0; i < extras.length; i++) {
                 const node = extras[i];
-                const azimuth = ((node.meshrf && node.meshrf.azimuth) || (360 * i / extras.length));
+                const azimuth = node.meshrf && "azimuth" in node.meshrf ? node.meshrf.azimuth : 360 * i / extras.length;
                 const spot = Math.floor(azimuth / step);
                 for (let j = 0; j < arrange.length; j++) {
                     const nspot = (spot + j) % arrange.length;

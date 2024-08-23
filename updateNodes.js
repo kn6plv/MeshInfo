@@ -366,11 +366,11 @@ module.exports = {
 
         // Scan the node groups, and adjust the lat/lon measurements so the nodes are close but don't overlap
         Object.values(sites).forEach(site => {
-            LogSite(site.nodes[0].node, site.nodes.length);
             const nodes = site.nodes;
             if (nodes.length == 1) {
                 return;
             }
+            LogSite("site:", nodes[0].node, nodes.length);
             const arrange = Array(nodes.length);
             const step = Math.max(16, 360 / arrange.length);
             const extras = [];
@@ -387,18 +387,20 @@ module.exports = {
             }
             for (let i = 0; i < extras.length; i++) {
                 const node = extras[i];
-                const azimuth = ((node.meshrf && node.meshrf.azimuth) || 0);
+                const azimuth = ((node.meshrf && node.meshrf.azimuth) || (360 * i / extras.length));
                 const spot = Math.floor(azimuth / step);
                 for (let j = 0; j < arrange.length; j++) {
                     const nspot = (spot + j) % arrange.length;
                     if (!arrange[nspot]) {
                         arrange[nspot] = node;
+                        break;
                     }
                 }
             }
             for (let i = 0; i < arrange.length; i++) {
                 const node = arrange[i];
                 if (node) {
+                    LogSite(node.node, Math.floor(i * step));
                     const nloc = latLonBearingDistance(nodes[0].lat, nodes[0].lon, i * step, 20);
                     node.mlat = nloc.lat;
                     node.mlon = nloc.lon;

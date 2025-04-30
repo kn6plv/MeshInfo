@@ -37,6 +37,7 @@ module.exports = {
                         ssid: d.meshrf.ssid,
                         channel: d.meshrf.channel,
                         freq: d.meshrf.freq,
+                        mode: d.meshrf.mode,
                         chanbw: d.meshrf.chanbw,
                         height: d.meshrf.height,
                         azimuth: d.meshrf.azimuth,

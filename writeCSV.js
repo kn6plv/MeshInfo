@@ -20,7 +20,7 @@ module.exports = {
                     `"a:3:{${node.sysinfo.loads.map((l, i) => 'i:' + i + ';d:' + l.toFixed(2) + ';').join('')}}",` +
                     `"${node.node_details.hardware}",` +
                     `"${node.node_details.model}",${node.node_details.firmware_version},` +
-                    `${node.meshrf && node.meshrf.ssid || 'None'},${node.meshrf && node.meshrf.channel || 'None'},${node.meshrf && node.meshrf.chanbw || 'None'},` +
+                    `${node.meshrf && node.meshrf.ssid || 'None'},${node.meshrf && node.meshrf.channel || 'None'},${node.meshrf && node.meshrf.mode || 'adhoc'},${node.meshrf && node.meshrf.chanbw || 'None'},` +
                     `${node.tunnels.active_tunnel_count},${"legacy_tunnel_count" in node.tunnels ? node.tunnels.legacy_tunnel_count : ''},${"wireguard_tunnel_count" in node.tunnels ? node.tunnels.wireguard_tunnel_count : ''},${node.lat || '"Not Available"'},${node.lon || '"Not Available"'},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'},` +
                     `${node.api_version},${node.node_details.board_id},${node.node_details.firmware_mfg},` +
                     `${node.grid_square || '"Not Available"'},${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'},` +

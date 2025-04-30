@@ -130,9 +130,10 @@ async function readNode(name) {
         try {
             const ac = new AbortController();
             setTimeout(() => ac.abort(), FETCH_TIMEOUT);
-            const req = await fetch(`http://${name}.local.mesh/cgi-bin/sysinfo.json?link_info=1&lqm=1`, { signal: ac.signal });
+            const req = await fetch(`http://${name}.local.mesh/cgi-bin/sysinfo.json?link_info=1`, { signal: ac.signal });
             const v = await req.json();
             console.log(`${name}: success`);
+console.log(v);
             resolve(v);
             return;
         }
@@ -145,7 +146,7 @@ async function readNode(name) {
         try {
             const ac = new AbortController();
             setTimeout(() => ac.abort(), FETCH_TIMEOUT);
-            const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1`, { signal: ac.signal });
+            const req = await fetch(`http://${name}.local.mesh:8080/cgi-bin/sysinfo.json?link_info=1`, { signal: ac.signal });
             const v = await req.json();
             console.log(`${name}: success`);
             resolve(v);

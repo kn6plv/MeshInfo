@@ -133,7 +133,6 @@ async function readNode(name) {
             const req = await fetch(`http://${name}.local.mesh/cgi-bin/sysinfo.json?link_info=1`, { signal: ac.signal });
             const v = await req.json();
             console.log(`${name}: success`);
-console.log(v);
             resolve(v);
             return;
         }

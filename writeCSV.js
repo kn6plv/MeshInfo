@@ -10,7 +10,7 @@ module.exports = {
 
     write(update, filename) {
         const csvtable = [
-            'node,wlan_ip,last_seen,uptime,loadavg,hardware,model,firmware_version,ssid,channel,chanbw,active_tunnel_count,legacy_tunnel_count,wireguard_tunnel_count,lat,lon,wifi_mac_address,api_version,board_id,firmware_mfg,grid_square,lan_ip,services,location_fix,lqm'
+            'node,wlan_ip,last_seen,uptime,loadavg,hardware,model,firmware_version,ssid,channel,mode,chanbw,active_tunnel_count,legacy_tunnel_count,wireguard_tunnel_count,lat,lon,wifi_mac_address,api_version,board_id,firmware_mfg,grid_square,lan_ip,services,location_fix,lqm'
         ];
 
         update.nodes.forEach(node => {

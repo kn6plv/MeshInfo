@@ -42,6 +42,7 @@ module.exports = {
                         height: d.meshrf.height,
                         azimuth: d.meshrf.azimuth,
                         elevation: d.meshrf.elevation,
+                        polarization: d.meshrf.polarization,
                         antenna: d.meshrf.antenna ? { description : d.meshrf.antenna.description } : undefined
                     },
                     interfaces: [

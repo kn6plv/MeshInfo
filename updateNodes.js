@@ -441,7 +441,7 @@ module.exports = {
                 case 'MikroTik hAP ac3':
                     let yes = false;
                     for (let l in (node.link_info || {})) {
-                        if (l.linkType == "RF") {
+                        if (node.link_info[l].linkType == "RF") {
                             yes = true;
                             break;
                         }

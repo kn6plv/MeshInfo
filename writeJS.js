@@ -46,7 +46,7 @@ module.exports = {
                         antenna: d.meshrf.antenna ? { description : d.meshrf.antenna.description } : undefined
                     },
                     interfaces: [
-                        { mac: d.interfaces[0].mac }
+                        { mac: d.interfaces[0] && d.interfaces[0].mac }
                     ],
                     link_info: link_info
                 }

@@ -28,8 +28,9 @@ require("./updateNodes").update(oldjson).then(update => {
   }
   catch (e) {
     Log(e);
+    process.exit(1);
   }
-  process.exit(1);
+  process.exit(0);
 }).catch(e => {
   Log(e);
   process.exit(1);

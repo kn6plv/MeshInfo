@@ -16,13 +16,13 @@ module.exports = {
         update.nodes.forEach(node => {
             try {
                 csvtable.push(
-                    `${node.node},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).ip || 'Unknown'},"${seen(node.lastseen)}","${node.sysinfo.uptime}",` +
+                    `"${node.node}",${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'br-nomesh' || i.name === 'br-mesh')) || {}).ip || 'Unknown'},"${seen(node.lastseen)}","${node.sysinfo.uptime}",` +
                     `"${node.node_details.hardware}",` +
                     `"${node.node_details.model}",${node.node_details.firmware_version},` +
-                    `${node.meshrf && node.meshrf.ssid || 'None'},${node.meshrf && node.meshrf.channel || 'None'},${node.meshrf && node.meshrf.mode || 'adhoc'},${node.meshrf && node.meshrf.chanbw || 'None'},` +
+                    `"${node.meshrf && node.meshrf.ssid || 'None'}",${node.meshrf && node.meshrf.channel || 'None'},${node.meshrf && node.meshrf.mode || 'adhoc'},${node.meshrf && node.meshrf.chanbw || 'None'},` +
                     `${node.tunnels.active_tunnel_count},` +
-                    `${node.lat || '"Not Available"'},${node.lon || '"Not Available"'},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'},` +
-                    `${node.node_details.board_id},${node.node_details.firmware_mfg},` +
+                    `${node.lat || '"Not Available"'},${node.lon || '"Not Available"'},${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'br-nomesh' || i.name === 'br-mesh')) || {}).mac || 'Unknown'},` +
+                    `"${node.node_details.board_id}","${node.node_details.firmware_mfg}",` +
                     `${(node.interfaces.find(i => i.name === 'br-lan') || {}).ip || '"Not Available"'},`
                 );
             }

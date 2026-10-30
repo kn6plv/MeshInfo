@@ -21,10 +21,30 @@ catch (e) {
 
 require("./updateNodes").update(oldjson).then(update => {
   try {
-    require("./writeCSV").write(update, CSVFILE);
-    require("./writeKML").write(update, KMLFILE);
-    require("./writeJSON").write(update, JSONFILE);
-    require("./writeJS").write(update, JSFILE);
+    try {
+      require("./writeCSV").write(update, CSVFILE);
+    }
+    catch (e) {
+      Log(e);
+    }
+    try {
+      require("./writeKML").write(update, KMLFILE);
+    }
+    catch (e) {
+      Log(e);
+    }
+    try {
+      require("./writeJSON").write(update, JSONFILE);
+    }
+    catch (e) {
+      Log(e);
+    }
+    try {
+      require("./writeJS").write(update, JSFILE);
+    }
+    catch (e) {
+      Log(e);
+    }
   }
   catch (e) {
     Log(e);

@@ -1,5 +1,6 @@
 
 const fs = require("fs");
+const Log = require("debug")("kml");
 
 // KML shared Styles section
 
@@ -712,7 +713,7 @@ module.exports = {
 
         // Loop through nodes list, generate KML Placemark for each
         update.nodes.forEach(node => {
-
+          try {
             // Get styleUrl based on 1st character of frequency field. 
             const freq1 = node.meshrf.freq ? String(node.meshrf.freq)[0] : 'N';
             const node_styleUrl = BAND_STYLE[freq1] || '#sm_nodes';
@@ -982,6 +983,10 @@ module.exports = {
 
             }
             // end of IF statement which generates main Placemark
+          }
+          catch (e) {
+            Log(e);
+          }
                                                             
         });
         // end of loop through nodes list

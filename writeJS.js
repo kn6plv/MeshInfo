@@ -57,12 +57,13 @@ module.exports = {
             catch (e) {
                 Log(e);
             }
+            return null;
         });
 
         fs.writeFileSync(filename, "const out = " + JSON.stringify({
             version: "1",
             date: Date.now(),
-            nodeInfo: jsontable
+            nodeInfo: jsontable.filter(o => o)
         }));
     }
 }

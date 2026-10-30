@@ -16,7 +16,7 @@ module.exports = {
         update.nodes.forEach(node => {
             try {
                 csvtable.push(
-                    `"${node.node}",${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'br-nomesh' || i.name === 'br-mesh')) || {}).ip || 'Unknown'},"${seen(node.lastseen)}","${node.sysinfo.uptime}",` +
+                    `"${node.node}",${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'br-nomesh' || i.name === 'br-mesh')) || node).ip || 'Unknown'},"${seen(node.lastseen)}","${node.sysinfo.uptime}",` +
                     `"${node.node_details.hardware}",` +
                     `"${node.node_details.model}",${node.node_details.firmware_version},` +
                     `"${node.meshrf && node.meshrf.ssid || 'None'}",${node.meshrf && node.meshrf.channel || 'None'},${node.meshrf && node.meshrf.mode || 'adhoc'},${node.meshrf && node.meshrf.chanbw || 'None'},` +

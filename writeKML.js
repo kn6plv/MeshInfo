@@ -767,7 +767,7 @@ module.exports = {
           </Data>
           <Data name="wifi_mac_address">
             <displayName>WiFi MAC Address</displayName>
-            <value>${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'eth1.3975')) || {}).mac || 'Unknown'}</value>
+            <value>${(node.interfaces.find(i => i.ip && (i.name === 'wlan0' || i.name === 'wlan1' || i.name === 'br-mesh')) || {}).mac || 'Unknown'}</value>
           </Data>
           <Data name="lan_ip">
             <displayName>LAN IP Address</displayName>
